@@ -1,13 +1,13 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import WbCloudyIcon from '@mui/icons-material/WbCloudy';
+import WebhookIcon from '@mui/icons-material/Webhook';
 
 function Footer() {
     return (
         <Box sx={{ mt: 'auto', py: 2, textAlign: 'center', backgroundColor: '#f5f5f5', flex: 'row' }}>
-            <WbCloudyIcon color="primary" fontSize="large"/>
+            <WebhookIcon color="success" fontSize="large"/>
             <Typography variant="body2" color="textSecondary" gutterBottom>
-                © {new Date().getFullYear()} Tech_Cloud
+                © {new Date().getFullYear()} DevSync
             </Typography>
         </Box>
     );

@@ -11,7 +11,7 @@ function NotFoundPage() {
             <Typography variant="h5" sx={{ mb: 3 }}>
                 Page not found
             </Typography>
-            <Button variant="contained" color="primary" component={RouterLink} to="/">
+            <Button variant="contained" color="success" component={RouterLink} to="/">
                 Go to main page
             </Button>
         </Box>

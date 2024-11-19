@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../store/userSlice';
-import WbCloudyIcon from '@mui/icons-material/WbCloudy';
+import WebhookIcon from '@mui/icons-material/Webhook';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function Header() {
@@ -68,10 +68,10 @@ function Header() {
             <Container maxWidth="lg">
                 <StyledToolbar variant="dense" disableGutters>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
-                        <WbCloudyIcon color="primary" fontSize="large"/>
+                        <WebhookIcon color="success" fontSize="large"/>
                         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-                            <Button variant="text" color="info" size="small" component={RouterLink} to={`/`}>
-                                Tech_Cloud
+                            <Button variant="text" color="success" size="small" sx={{textTransform: 'none'}} component={RouterLink} to={`/`}>
+                                DevSync
                             </Button>
                             {authToken && user?.role === 'admin' && (
                                 <Button variant="text" color="secondary" size="large" href="http://localhost:8080/admin" target="_blank" startIcon={<AdminPanelSettingsIcon fontSize="large" color="secondary"/>}>
@@ -103,10 +103,10 @@ function Header() {
                         </>
                         ) : (
                         <>
-                            <Button color="primary" variant="text" size="small" component={RouterLink} to={`/sign-in/`}>
+                            <Button color="success" variant="text" size="small" component={RouterLink} to={`/sign-in/`}>
                                 Sign in
                             </Button>
-                            <Button color="primary" variant="contained" size="small" component={RouterLink} to={`/sign-up/`}>
+                            <Button color="success" variant="contained" size="small" component={RouterLink} to={`/sign-up/`}>
                                 Sign up
                             </Button>
                         </>
@@ -156,12 +156,12 @@ function Header() {
                                 ) : (
                                     <>
                                         <MenuItem>
-                                            <Button color="primary" variant="contained" fullWidth component={RouterLink} to="/sign-up" onClick={toggleDrawer(false)}>
+                                            <Button color="success" variant="contained" fullWidth component={RouterLink} to="/sign-up" onClick={toggleDrawer(false)}>
                                                 Sign up
                                             </Button>
                                         </MenuItem>
                                         <MenuItem>
-                                            <Button color="primary" variant="outlined" fullWidth component={RouterLink} to="/sign-in" onClick={toggleDrawer(false)}>
+                                            <Button color="success" variant="outlined" fullWidth component={RouterLink} to="/sign-in" onClick={toggleDrawer(false)}>
                                                 Sign in
                                             </Button>
                                         </MenuItem>

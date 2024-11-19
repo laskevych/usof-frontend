@@ -11,8 +11,8 @@ function Filters() {
     const [categories, setCategories] = useState([]);
     const [selectedCategories, setSelectedCategories] = useState([]);
     const [status, setStatus] = useState('');
-    const [creationAtStart, setCreationAtStart] = useState('');
-    const [creationAtEnd, setCreationAtEnd] = useState('');
+    const [createdAtStart, setcreatedAtStart] = useState('');
+    const [createdAtEnd, setcreatedAtEnd] = useState('');
     const [sortBy, setSortBy] = useState('');
 
     const location = useLocation();
@@ -33,8 +33,8 @@ function Filters() {
         const queryParams = new URLSearchParams(location.search);
         setStatus(queryParams.get('status') || '');
         setSelectedCategories(queryParams.get('categories') ? queryParams.get('categories').split(',') : []);
-        setCreationAtStart(queryParams.get('creationAtStart') || '');
-        setCreationAtEnd(queryParams.get('creationAtEnd') || '');
+        setcreatedAtStart(queryParams.get('createdAtStart') || '');
+        setcreatedAtEnd(queryParams.get('createdAtEnd') || '');
         setSortBy(queryParams.get('sortBy') || '');
     }, [location]);
 
@@ -43,8 +43,8 @@ function Filters() {
 
         if (status) queryParams.set('status', status);
         if (selectedCategories.length > 0) queryParams.set('categories', selectedCategories.join(','));
-        if (creationAtStart) queryParams.set('creationAtStart', creationAtStart);
-        if (creationAtEnd) queryParams.set('creationAtEnd', creationAtEnd);
+        if (createdAtStart) queryParams.set('createdAtStart', createdAtStart);
+        if (createdAtEnd) queryParams.set('createdAtEnd', createdAtEnd);
         if (sortBy) queryParams.set('sortBy', sortBy);
 
         navigate(`/?${queryParams.toString()}`);
@@ -53,8 +53,8 @@ function Filters() {
     const handleFilterReset = () => {
         setStatus('');
         setSelectedCategories([]);
-        setCreationAtStart('');
-        setCreationAtEnd('');
+        setcreatedAtStart('');
+        setcreatedAtEnd('');
         setSortBy('');
         navigate('/');
     };
@@ -62,7 +62,7 @@ function Filters() {
     return (
         <Grid size={{ xs: 12, md: 3 }}>
             <Box sx={{ mb: 2 }}>
-                <Button fullWidth variant="contained" startIcon={<AddIcon />}
+                <Button fullWidth variant="contained" color="success" startIcon={<AddIcon />}
                         component={RouterLink}
                         to="/posts/create">
                     Create post
@@ -114,8 +114,8 @@ function Filters() {
                         <TextField
                             label="Creation Date Start"
                             type="date"
-                            value={creationAtStart}
-                            onChange={(e) => setCreationAtStart(e.target.value)}
+                            value={createdAtStart}
+                            onChange={(e) => setcreatedAtStart(e.target.value)}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -125,8 +125,8 @@ function Filters() {
                         <TextField
                             label="Creation Date End"
                             type="date"
-                            value={creationAtEnd}
-                            onChange={(e) => setCreationAtEnd(e.target.value)}
+                            value={createdAtEnd}
+                            onChange={(e) => setcreatedAtEnd(e.target.value)}
                             InputLabelProps={{
                                 shrink: true,
                             }}
@@ -143,19 +143,19 @@ function Filters() {
                             onChange={(e) => setSortBy(e.target.value)}
                         >
                             <MenuItem value="">None</MenuItem>
-                            <MenuItem value="creationAt-asc">Creation Date ↑</MenuItem>
-                            <MenuItem value="creationAt-desc">Creation Date ↓</MenuItem>
-                            <MenuItem value="likes-asc">Likes ↑</MenuItem>
-                            <MenuItem value="likes-desc">Likes ↓</MenuItem>
+                            <MenuItem value="createdAt:asc">Creation Date ↑</MenuItem>
+                            <MenuItem value="createdAt:desc">Creation Date ↓</MenuItem>
+                            <MenuItem value="likes:asc">Likes ↑</MenuItem>
+                            <MenuItem value="likes:desc">Likes ↓</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
 
                 <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Button fullWidth variant="contained" onClick={handleFilterApply}>
+                    <Button fullWidth variant="contained" color="success" onClick={handleFilterApply}>
                         Apply
                     </Button>
-                    <Button fullWidth variant="outlined" onClick={handleFilterReset}>
+                    <Button fullWidth variant="outlined" color="success" onClick={handleFilterReset}>
                         Reset
                     </Button>
                 </Box>

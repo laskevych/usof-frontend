@@ -15,7 +15,7 @@ const AuthorRoute = ({ children }) => {
                 const response = await axios.get(`http://localhost:8080/api/posts/${id}`, {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
-                setIsAuthor(response.data.data.creationById === user.id);
+                setIsAuthor(response.data.data.createdById === user.id);
             } catch (error) {
                 console.error('Error fetching post:', error);
             }

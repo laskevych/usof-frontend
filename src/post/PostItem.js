@@ -81,7 +81,7 @@ function PostItem({ post }) {
                         </Typography>
                     </Box>
                     <Typography>•</Typography>
-                    <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
+                    <Typography variant="caption">{formatTimestamp(post.createdAt)}</Typography>
                 </Box>
                 {post.status === 'inactive' && (
                     <Chip label="Disabled" icon={<VisibilityOffIcon/>}></Chip>

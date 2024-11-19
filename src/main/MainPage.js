@@ -58,7 +58,7 @@ function MainPage() {
     useEffect(() => {
         const fetchPostsForHomePage = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/posts/?showOnHomepage=1&status=active&sortBy=rating:desc`);
+                const response = await axios.get(`http://localhost:8080/api/posts/?isTop=1&status=active&sortBy=rating:desc`);
                 setPosts(response.data.data);
             } catch (error) {
                 console.error('Error fetching comments:', error);

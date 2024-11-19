@@ -64,7 +64,7 @@ function PostList() {
                         count={pagination.totalPages}
                         page={pagination.currentPage}
                         onChange={handlePageChange}
-                        color="primary"
+                        color="success"
                     />
                 </Box>
             )}

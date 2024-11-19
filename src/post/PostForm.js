@@ -114,7 +114,7 @@ function PostForm({ post, onSubmit, onDelete }) {
                 <Button variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
                     Back
                 </Button>
-                <Button type="submit" variant="contained" color="primary" sx={{ mt: 2 }} fullWidth>
+                <Button type="submit" variant="contained" color="success" sx={{ mt: 2 }} fullWidth>
                     Save
                 </Button>
                 {onDelete && (

@@ -125,7 +125,7 @@ function UserProfilePage() {
                         {user?.id === userData.id && (
                             <Button
                                 variant="contained"
-                                color="primary"
+                                color="success"
                                 sx={{ mt: 3 }}
                                 component={RouterLink}
                                 to={`/users/${id}/edit`}
@@ -163,8 +163,8 @@ function UserProfilePage() {
                     centered
                     variant="fullWidth"
                 >
-                    <Tab icon={<ArticleIcon color="primary" />} label="Posts"/>
-                    <Tab icon={<BookmarkAddedIcon color="primary" />} label="Favorites" />
+                    <Tab icon={<ArticleIcon color="success" />} label="Posts"/>
+                    <Tab icon={<BookmarkAddedIcon color="success" />} label="Favorites" />
                 </Tabs>
             </Box>
 

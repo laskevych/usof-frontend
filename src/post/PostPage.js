@@ -200,7 +200,7 @@ function PostPage() {
                             </Typography>
                         </Box>
                         <Typography>•</Typography>
-                        <Typography variant="caption">{formatTimestamp(post.creationAt)}</Typography>
+                        <Typography variant="caption">{formatTimestamp(post.createdAt)}</Typography>
                     </Box>
                     <StyledCardContent
                         sx={{
@@ -254,7 +254,7 @@ function PostPage() {
                                 onClick={handleLike}
                                 disabled={!authToken}
                             >
-                                {userHasLiked ? <ThumbUpIcon color="primary" /> : <ThumbUpOutlinedIcon />}
+                                {userHasLiked ? <ThumbUpIcon color="success" /> : <ThumbUpOutlinedIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'like').length}</Typography>
 

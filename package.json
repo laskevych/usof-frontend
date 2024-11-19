@@ -1,6 +1,7 @@
 {
-  "name": "usof-frontend",
-  "version": "0.1.0",
+  "name": "devsync-frontend",
+  "description": "DevSync is a collaborative platform designed to bring developers together to solve coding challenges, share expertise, and streamline problem-solving. Whether you’re debugging a tricky issue, exploring new technologies, or looking for peer reviews, DevSync connects you with a community of developers eager to help.",
+  "version": "1.05.4",
   "private": true,
   "dependencies": {
     "@chakra-ui/react": "^3.0.2",

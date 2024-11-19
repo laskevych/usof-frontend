@@ -30,7 +30,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
     const [content, setContent] = useState(comment.content);
     const userHasLiked = likes.some(like => like.type === 'like' && like.author.id === user?.id);
     const userHasDisliked = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
-    const userCanSetHelpful = !comment.isHelpful && post.author.id === user?.id;
+    const userCanSetHelpful = !comment.isBest && post.author.id === user?.id;
 
     const [showReplyForm, setShowReplyForm] = useState(false); // State для форми відповіді
     const [replyContent, setReplyContent] = useState(''); // State для тексту відповіді
@@ -126,7 +126,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             await axios.patch(`http://localhost:8080/api/comments/${comment.id}/setHelpful`, {}, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
-            updateCommentInState(comment.id, { isHelpful: true });
+            updateCommentInState(comment.id, { isBest: true });
         } catch (error) {
             console.error('Error marking comment as helpful:', error);
         }
@@ -178,7 +178,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     </Typography>
                 </Box>
                 <Typography>•</Typography>
-                <Typography variant="caption">{formatTimestamp(comment.creationAt)}</Typography>
+                <Typography variant="caption">{formatTimestamp(comment.createdAt)}</Typography>
             </Box>
             {editMode ? (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
@@ -208,7 +208,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         disabled={!authToken}
                         size="small"
                     >
-                        {userHasLiked ? <ThumbUpIcon color="primary"/> : <ThumbUpOutlinedIcon />}
+                        {userHasLiked ? <ThumbUpIcon color="success"/> : <ThumbUpOutlinedIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'like').length}</Typography>
 
@@ -224,11 +224,11 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         <Button onClick={handleHelpful} size="small" color="warning" startIcon={<EmojiEventsOutlinedIcon />}>
                             Helpful
                         </Button>
-                        : (comment.isHelpful || comment.isHelpful === 1) && (
+                        : (comment.isBest || comment.isBest === 1) && (
                             <Tooltip title="Helpful" placement="top">
                                 <span>
                                     <IconButton disabled size="small">
-                                        {comment.isHelpful ? <EmojiEventsIcon color="warning" /> : <EmojiEventsOutlinedIcon />}
+                                        {comment.isBest ? <EmojiEventsIcon color="warning" /> : <EmojiEventsOutlinedIcon />}
                                     </IconButton>
                                 </span>
                             </Tooltip>
@@ -293,7 +293,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                                 multiline
                                 size="small"
                             />
-                            <Button onClick={handleAddReply} variant="contained" color="primary" startIcon={<AddIcon />}>Comment</Button>
+                            <Button onClick={handleAddReply} variant="contained" color="success" startIcon={<AddIcon />}>Comment</Button>
                         </Box>
                     )}
                 </>
@@ -365,7 +365,7 @@ function CommentsBlock({ post }) {
                         onChange={(e) => setNewComment(e.target.value)}
                         multiline
                     />
-                    <Button onClick={handleAddComment} variant="contained" color="primary" startIcon={<AddIcon />}>Comment</Button>
+                    <Button onClick={handleAddComment} variant="contained" color="success" startIcon={<AddIcon />}>Comment</Button>
                 </Box>
             )}
             {comments.map(comment => (
