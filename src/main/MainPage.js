@@ -41,7 +41,7 @@ function MainPage() {
                 const response = await axios.get(`http://localhost:8080/api/posts/?isTop=1&sortBy=rating:desc&status=active`);
                 setPosts(response.data.data);
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error('Error fetching. ', error);
             }
         };
 

@@ -20,12 +20,14 @@ function PostList() {
         try {
             const queryParams = new URLSearchParams(location.search);
             const response = await axios.get(`http://localhost:8080/api/posts/?${queryParams.toString()}`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
             });
             setPosts(response.data.data);
             setPagination(response.data.pagination);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching. ', error);
         }
         setLoading(false);
     };

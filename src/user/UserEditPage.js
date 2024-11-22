@@ -24,7 +24,9 @@ function UserEditPage() {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/users/${id}`, {
-                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                    headers: authToken
+                        ? { Authorization: `Bearer ${authToken}` }
+                        : {},
                 });
                 setUserData(response.data.data);
                 setFormData((prevData) => ({

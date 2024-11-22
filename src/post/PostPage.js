@@ -34,11 +34,13 @@ function PostPage() {
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:8080/api/posts/${id}`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
             });
             setPost(response.data.data);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching. ', error);
         }
         setLoading(false);
     };
@@ -46,7 +48,9 @@ function PostPage() {
     const fetchLikes = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/posts/${id}/like/`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
             });
             setLikes(response.data.data);
         } catch (error) {
@@ -57,11 +61,13 @@ function PostPage() {
     const fetchFavoritePosts = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/users/${user.id}/favorite/`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
             });
             setFavoritePosts(response.data.data);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching. ', error);
         }
     };
 

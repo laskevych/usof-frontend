@@ -31,7 +31,9 @@ function UserProfilePage() {
         const fetchUserData = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/users/${id}`, {
-                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                    headers: authToken
+                        ? { Authorization: `Bearer ${authToken}` }
+                        : {},
                 });
                 setUserData(response.data.data);
             } catch (error) {
@@ -43,22 +45,26 @@ function UserProfilePage() {
         const fetchFavoritePosts = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/users/${id}/favorite/`, {
-                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                    headers: authToken
+                        ? { Authorization: `Bearer ${authToken}` }
+                        : {},
                 });
                 setFavoritePosts(response.data.data);
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error('Error fetching. ', error);
             }
         };
 
         const fetchUserPosts = async () => {
             try {
                 const response = await axios.get(`http://localhost:8080/api/users/${id}/posts/`, {
-                    headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                    headers: authToken
+                        ? { Authorization: `Bearer ${authToken}` }
+                        : {},
                 });
                 setUserPosts(response.data.data);
             } catch (error) {
-                console.error('Error fetching posts:', error);
+                console.error('Error fetching. ', error);
             }
         };
 

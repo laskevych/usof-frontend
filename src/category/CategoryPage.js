@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Pagination, LinearProgress, Chip} from '@mui/material';
 import axios from 'axios';
-import PostItem from '../post/PostItem';
-import { useLocation, useNavigate, useParams} from 'react-router-dom';
-import Typography from "@mui/material/Typography";
-import Grid from "@mui/material/Grid2";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import {useSelector} from "react-redux";
+import {Box, Pagination, LinearProgress, Chip, Typography} from '@mui/material';
+import { useLocation, useNavigate, useParams} from 'react-router-dom';
+import Grid from "@mui/material/Grid2";
+import PostItem from '../post/PostItem';
 
 function CategoryPage() {
-    const { id } = useParams();
-    const { authToken, user } = useSelector((state) => state.user);
     const [category, setCategory] = useState({});
+    const { id } = useParams();
     const [posts, setPosts] = useState([]);
-    const [pagination, setPagination] = useState(null);
+    const { authToken, user } = useSelector((state) => state.user);
     const [loading, setLoading] = useState(true);
+    const [pagination, setPagination] = useState(null);
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -23,11 +22,13 @@ function CategoryPage() {
         setLoading(true);
         try {
             const response = await axios.get(`http://localhost:8080/api/categories/${id}`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken 
+                    ? { Authorization: `Bearer ${authToken}` } 
+                    : {},
             });
             setCategory(response.data.data);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching. ', error);
         }
         setLoading(false);
     };
@@ -37,19 +38,21 @@ function CategoryPage() {
         try {
             const queryParams = new URLSearchParams(location.search);
             const response = await axios.get(`http://localhost:8080/api/categories/${id}/posts/?${queryParams.toString()}`, {
-                headers: authToken ? { Authorization: `Bearer ${authToken}` } : {},
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
             });
             setPosts(response.data.data);
             setPagination(response.data.pagination);
         } catch (error) {
-            console.error('Error fetching posts:', error);
+            console.error('Error fetching. ', error);
         }
         setLoading(false);
     };
 
     useEffect(() => {
-        fetchCategory();
         fetchPosts();
+        fetchCategory();
     }, [id, location.search]);
 
     const handlePageChange = (event, value) => {
@@ -69,46 +72,46 @@ function CategoryPage() {
     return (
         <Grid size={{ xs: 12, md: 8 }}>
             <Box sx={{ mb: 5, textAlign: "center" }}>
-                <Typography variant="h3" gutterBottom>
-                    {category.title}
-                </Typography>
+                <Typography variant="h3" gutterBottom>{category.title}</Typography>
                 <Typography>{category.description}</Typography>
                 {user?.role === 'admin' && (
                     <Chip
                         icon={<AdminPanelSettingsIcon />}
-                        color="secondary"
                         variant="outlined"
-                        label="Edit in Admin Panel"
+                        target="_blank"
+                        color="secondary"
                         sx={{
                             border: 'none',
                             boxShadow: 'none',
                             mt: 2
                         }}
+                        label="Edit in Admin Panel"
                         href={`http://localhost:8080/admin/resources/categories/records/${category.id}/show`}
-                        component="a"
                         clickable
-                        target="_blank"
+                        component="a"
                     />
                 )}
             </Box>
-            <Box
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
-            >
-                {posts.map((post) => (
-                    <PostItem key={post.id} post={post} />
-                ))}
-            </Box>
+            <Box sx={{ width: '100%' }}>
+                <Grid container rowSpacing={2} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
+                    {posts.map((post) => (
+                        <Grid size={{ xs: 12, md: 6 }} key={post.id}>
+                            <PostItem post={post} />
+                        </Grid>
+                    ))}
+                </Grid>
 
-            {pagination && pagination.totalPages > 1 && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-                    <Pagination
-                        count={pagination.totalPages}
-                        page={pagination.currentPage}
-                        onChange={handlePageChange}
-                        color="success"
-                    />
-                </Box>
-            )}
+                {pagination && pagination.totalPages > 1 && (
+                    <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                        <Pagination
+                            count={pagination.totalPages}
+                            page={pagination.currentPage}
+                            onChange={handlePageChange}
+                            color="success"
+                        />
+                    </Box>
+                )}
+            </Box>
         </Grid>
     );
 }
