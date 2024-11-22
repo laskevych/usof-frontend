@@ -14,7 +14,7 @@ import PostPage from "./post/PostPage";
 import CategoryPage from "./category/CategoryPage";
 import PostEditPage from "./post/PostEditPage";
 import PostCreatePage from "./post/PostCreatePage";
-import UserProfilePage from "./user/UserProfilePage";
+import UserPage from "./user/UserPage";
 import UserEditPage from "./user/UserEditPage";
 import ProtectedRoute from './route/ProtectedRoute';
 import AuthorRoute from './route/AuthorRoute';
@@ -95,7 +95,7 @@ function App() {
                                 <Route path="/" element={<MainPage />} />
                                 <Route path="/posts/:id" element={<PostPage />} />
                                 <Route path="/categories/:id/posts" element={<CategoryPage />} />
-                                <Route path="/users/:id" element={<UserProfilePage />} />
+                                <Route path="/users/:id" element={<UserPage />} />
 
                                 <Route
                                     path="/posts/create/"

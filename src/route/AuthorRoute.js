@@ -17,7 +17,7 @@ const AuthorRoute = ({ children }) => {
                 });
                 setIsAuthor(response.data.data.createdById === user.id);
             } catch (error) {
-                console.error('Error fetching post:', error);
+                console.error('Error fetching.', error);
             }
             setLoading(false);
         };

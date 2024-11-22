@@ -35,10 +35,10 @@ function LogInPage() {
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                const validationErrors = error.response.data.validationErrors;
+                const validationErrs = error.response.data.validationErrs;
                 const formErrors = {};
 
-                validationErrors.forEach((err) => {
+                validationErrs.forEach((err) => {
                     const field = err.path;
                     if (!formErrors[field]) {
                         formErrors[field] = err.msg;

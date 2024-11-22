@@ -23,7 +23,7 @@ function Filters() {
                 console.log(response.data.data);
                 setCategories(response.data.data);
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error('Error fetching.', error);
             }
         };
 

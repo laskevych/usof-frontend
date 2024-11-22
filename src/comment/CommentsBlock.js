@@ -16,7 +16,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
@@ -41,7 +41,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             const response = await axios.get(`http://localhost:8080/api/comments/${comment.id}/like`);
             setLikes(response.data.data);
         } catch (error) {
-            console.error('Error fetching likes:', error);
+            console.error('Error fetching.', error);
         }
     };
 
@@ -246,14 +246,14 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     {(user?.role === 'admin') && (
                         <Button
                             size="small"
-                            color="secondary"
-                            startIcon={<AdminPanelSettingsIcon />}
+                            color="primary"
+                            startIcon={<ManageAccountsIcon />}
                             href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
                             component="a"
                             clickable
                             target="_blank"
                         >
-                            Edit in Admin Panel
+                            Modify in Admin Panel
                         </Button>
                     )}
 
@@ -322,7 +322,7 @@ function CommentsBlock({ post }) {
                 const response = await axios.get(`http://localhost:8080/api/posts/${post.id}/comments`);
                 setComments(response.data.data);
             } catch (error) {
-                console.error('Error fetching comments:', error);
+                console.error('Error fetching.', error);
             }
         };
 

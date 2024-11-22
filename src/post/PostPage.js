@@ -11,7 +11,7 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 
 import EditIcon from '@mui/icons-material/Edit';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {useSelector} from "react-redux";
 import { Link } from '@mui/material';
 import CommentsBlock from "../comment/CommentsBlock";
@@ -54,7 +54,7 @@ function PostPage() {
             });
             setLikes(response.data.data);
         } catch (error) {
-            console.error('Error fetching likes:', error);
+            console.error('Error fetching.', error);
         }
     }
 
@@ -298,8 +298,8 @@ function PostPage() {
                                         textDecoration: 'none'
                                     }}
                                 >
-                                    <AdminPanelSettingsIcon sx={{ mr: 1 }} color="secondary" />
-                                    <Typography variant="body2" color="secondary">Edit in Admin Panel</Typography>
+                                    <ManageAccountsIcon sx={{ mr: 1 }} color="secondary" />
+                                    <Typography variant="body2" color="primary">Modify in Admin Panel</Typography>
                                 </Link>
                             )}
                         </Box>

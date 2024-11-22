@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import {useSelector} from "react-redux";
 import {Box, Pagination, LinearProgress, Chip, Typography} from '@mui/material';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
@@ -76,16 +76,16 @@ function CategoryPage() {
                 <Typography>{category.description}</Typography>
                 {user?.role === 'admin' && (
                     <Chip
-                        icon={<AdminPanelSettingsIcon />}
+                        icon={<ManageAccountsIcon />}
                         variant="outlined"
                         target="_blank"
-                        color="secondary"
+                        color="primary"
                         sx={{
                             border: 'none',
                             boxShadow: 'none',
                             mt: 2
                         }}
-                        label="Edit in Admin Panel"
+                        label="Modify in Admin Panel"
                         href={`http://localhost:8080/admin/resources/categories/records/${category.id}/show`}
                         clickable
                         component="a"

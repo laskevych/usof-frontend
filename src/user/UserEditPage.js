@@ -1,21 +1,17 @@
+import axios from 'axios';
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Avatar, IconButton } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import axios from 'axios';
 import { setUser } from '../store/userSlice';
 
 function UserEditPage() {
+    const dispatch = useDispatch();
     const { id } = useParams();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const { user, authToken } = useSelector((state) => state.user);
 
-    const [formData, setFormData] = useState({
-        fullName: '',
-        password: '',
-        password_confirm: '',
-    });
+    const [formData, setFormData] = useState({ fullName: '', password: '', password_confirm: '' });
     const [avatar, setAvatar] = useState(null);
     const [userData, setUserData] = useState({});
     const [errors, setErrors] = useState({});
@@ -29,29 +25,20 @@ function UserEditPage() {
                         : {},
                 });
                 setUserData(response.data.data);
-                setFormData((prevData) => ({
-                    ...prevData,
+                setFormData((previousData) => ({
+                    ...previousData,
                     fullName: response.data.data.fullName,
                 }));
             } catch (error) {
-                console.error('Error fetching user data:', error);
+                console.error('Error fetching.', error);
             }
         };
         fetchUserData();
     }, [id, authToken]);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleAvatarChange = (e) => {
-        setAvatar(e.target.files[0]);
-    };
-
-    const handleSubmit = async (e) => {
+    const handleAvatarChange = (e) => { setAvatar(e.target.files[0]);};
+    const handleChange = (e) => { setFormData({...formData, [e.target.name]: e.target.value})};
+    const handleEdit = async (e) => {
         e.preventDefault();
         setErrors({});
 
@@ -67,20 +54,14 @@ function UserEditPage() {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
 
-            dispatch(setUser({
-                authToken,
-                user: {
-                    ...user,
-                    fullName: response.data.data.fullName,
-                },
-            }));
+            dispatch(setUser({ authToken, user: {...user, fullName: response.data.data.fullName}}));
 
             navigate(`/users/${id}`);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                const validationErrors = error.response.data.validationErrors;
+                const validationErrs = error.response.data.validationErrs;
                 const formErrors = {};
-                validationErrors.forEach((err) => {
+                validationErrs.forEach((err) => {
                     formErrors[err.path] = err.msg;
                 });
                 setErrors(formErrors);
@@ -88,12 +69,10 @@ function UserEditPage() {
         }
     };
 
-    const handleAvatarSubmit = async () => {
+    const handleProfilePictureChange = async () => {
         if (!avatar) return;
-
         const formData = new FormData();
         formData.append('profilePicture', avatar);
-
         try {
             const response = await axios.patch(`http://localhost:8080/api/users/${id}/avatar`, formData, {
                 headers: {
@@ -101,80 +80,75 @@ function UserEditPage() {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
-            dispatch(setUser({
-                authToken,
-                user: {
-                    ...user,
-                    profilePicture: response.data.data.profilePicture,
-                },
-            }));
-
+            dispatch(setUser({authToken, user: {...user, profilePicture: response.data.data.profilePicture}}));
             navigate(`/users/${id}`);
         } catch (error) {
-            console.error('Error uploading avatar:', error);
+            console.error('Error uploading picture:', error);
         }
     };
 
     return (
-        <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 500, mx: 'auto', mt: 4 }}>
-            <Typography variant="h5" gutterBottom>
-                Edit Profile
-            </Typography>
-            <Avatar
-                src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
-                alt={userData.fullName || userData.login}
-                sx={{ width: 100, height: 100, mt: 2 }}
-            />
-            <IconButton component="label" sx={{ mt: 2 }}>
-                <input type="file" hidden onChange={handleAvatarChange} />
-                <Typography>Upload New Avatar</Typography>
-            </IconButton>
-            <Button onClick={handleAvatarSubmit} variant="contained" sx={{ mt: 2 }}>
-                Save Avatar
-            </Button>
+        <Box component="form" onSubmit={handleEdit} sx={{ maxWidth: 500, mx: 'auto', mt: 4 }}>
+            <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center'
+            }}>
+                <Avatar
+                    src={`http://localhost:8080/profile-pictures/${userData.profilePicture}`}
+                    alt={userData.fullName || userData.login}
+                    sx={{ width: 200, height: 200, mt: 2 }}
+                />
+                <IconButton component="label" sx={{ mt: 2 }}>
+                    <input type="file" hidden onChange={handleAvatarChange} />
+                    <Typography>New Avatar</Typography>
+                </IconButton>
+                <Button color="success" onClick={handleProfilePictureChange} variant="contained" sx={{ mt: 2 }}>
+                    Upload Avatar
+                </Button>
+            </Box>
             <TextField
                 color="success"
                 label="Full Name"
                 name="fullName"
+                required
+                margin="normal"
                 value={formData.fullName}
                 onChange={handleChange}
                 fullWidth
-                margin="normal"
-                required
-                error={!!errors.fullName}
                 helperText={errors.fullName}
+                error={!!errors.fullName}
             />
             <TextField
                 color="success"
+                helperText={errors.password}
                 label="New Password"
                 name="password"
                 type="password"
+                error={!!errors.password}
                 value={formData.password}
                 onChange={handleChange}
                 fullWidth
                 margin="normal"
-                error={!!errors.password}
-                helperText={errors.password}
             />
             <TextField
                 color="success"
-                label="Confirm Password"
+                helperText={errors.password_confirm}
                 name="password_confirm"
                 type="password"
                 value={formData.password_confirm}
                 onChange={handleChange}
+                label="Confirm Password"
                 fullWidth
                 margin="normal"
                 error={!!errors.password_confirm}
-                helperText={errors.password_confirm}
             />
-            <Box mt={2}>
-                <Button variant="contained" color="default" fullWidth onClick={() => navigate(-1)}>
-                    Back
+            <Box sx={{mt: 2}}>
+                <Button type="submit" variant="contained" color="success" fullWidth>
+                    Save
                 </Button>
-                <Button type="submit" variant="contained" color="success" sx={{ mt: 2 }} fullWidth>
-                    Save Changes
+                <Button variant="contained" color="default" sx={{ mt: 2 }} fullWidth onClick={() => navigate(-1)}>
+                    Back
                 </Button>
             </Box>
         </Box>

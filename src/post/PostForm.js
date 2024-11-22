@@ -25,7 +25,7 @@ function PostForm({ post, onSubmit, onDelete }) {
                     setSelectedCategories(initialSelectedCategories);
                 }
             } catch (error) {
-                console.error('Error fetching categories:', error);
+                console.error('Error fetching. ', error);
             }
         };
         fetchCategories();
@@ -46,9 +46,9 @@ function PostForm({ post, onSubmit, onDelete }) {
             await onSubmit(payload);
         } catch (error) {
             if (error.response && error.response.status === 400) {
-                const validationErrors = error.response.data.validationErrors;
+                const validationErrs = error.response.data.validationErrs;
                 const formErrors = {};
-                validationErrors.forEach((err) => {
+                validationErrs.forEach((err) => {
                     formErrors[err.path] = err.msg;
                 });
                 setErrors(formErrors);

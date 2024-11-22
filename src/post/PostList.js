@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useContext } from 'react';
-import {Box, Pagination, LinearProgress, Typography} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import {Box, Pagination, LinearProgress } from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
 import {useLocation, useNavigate} from 'react-router-dom';

@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../store/userSlice';
 import WebhookIcon from '@mui/icons-material/Webhook';
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import PostAddIcon from "@mui/icons-material/PostAdd";
 
 function Header() {
@@ -46,21 +46,23 @@ function Header() {
                 }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
                         <WebhookIcon color="success" fontSize="large"/>
-                        <Box sx={{ display: { xs: 'none', md: 'flex', gap: 5} }}>
+                        <Box sx={{ display: { xs: 'none', md: 'flex', gap: 10} }}>
                             <Button variant="text" color="success" size="small" sx={{textTransform: 'none'}} component={RouterLink} to={`/`}>
                                 DevSync
                             </Button>
                             {authToken && user && (
-                                <Button fullWidth variant="contained" color="success" startIcon={<PostAddIcon />}
-                                        component={RouterLink}
-                                        to="/posts/create">
-                                    Add post
-                                </Button>
+                                <Box>
+                                    <Button size="small" fullWidth variant="contained" color="success" startIcon={<PostAddIcon />} component={RouterLink} to="/posts/create">
+                                        Add post
+                                    </Button>
+                                </Box>
                             )}
                             {authToken && user?.role === 'admin' && (
-                                <Button variant="text" color="primary" target="_blank" size="large" href="http://localhost:8080/admin" startIcon={<AdminPanelSettingsIcon fontSize="large" color="primary"/>}>
-                                    Admin Panel
-                                </Button>
+                                <Box>
+                                    <Button variant="text" color="primary" target="_blank" size="small" href="http://localhost:8080/admin" startIcon={<ManageAccountsIcon fontSize="large" color="primary"/>}>
+                                        Admin Panel
+                                    </Button>
+                                </Box>
                             )}
                         </Box>
                     </Box>

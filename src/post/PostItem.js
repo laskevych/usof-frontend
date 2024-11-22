@@ -115,10 +115,10 @@ function PostItem({ post }) {
                 }}
             >
                 <Chip icon={<ArrowUpwardIcon />} color="default" variant="outlined" label={post.likes} sx={{border: 'none', boxShadow: 'none'}}  />
-                <Chip icon={<CommentIcon />} color="default" variant="outlined" label={post.commentsCount} sx={{border: 'none', boxShadow: 'none'}} />
                 {post.status === 'inactive' && (
                     <Chip icon={<BlockIcon/>} label="Inactive" variant="outlined" color="default" sx={{border: 'none', boxShadow: 'none'}}></Chip>
                 )}
+                <Chip icon={<CommentIcon />} color="default" variant="outlined" label={post.commentsCount} sx={{border: 'none', boxShadow: 'none'}} />
             </Box>
         </Card>
     )
