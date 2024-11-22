@@ -5,7 +5,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import CommentIcon from '@mui/icons-material/Comment';
 import BlockIcon from '@mui/icons-material/Block';
 
-function formatTimestamp(timestamp) {
+function formatCreatedAt(timestamp) {
     return (new Date(timestamp)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
@@ -57,7 +57,7 @@ function PostItem({ post }) {
                         </Typography>
                     </Box>
                 </Box>
-                <Typography variant="caption">{formatTimestamp(post.createdAt)}</Typography>
+                <Typography variant="caption">{formatCreatedAt(post.createdAt)}</Typography>
             </Box>
             <CardContent
                 component={RouterLink}

@@ -18,7 +18,7 @@ import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
-function formatTimestamp(timestamp) {
+function formatCreatedAt(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
         date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -179,7 +179,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     </Typography>
                 </Box>
                 <Typography>•</Typography>
-                <Typography variant="caption">{formatTimestamp(comment.createdAt)}</Typography>
+                <Typography variant="caption">{formatCreatedAt(comment.createdAt)}</Typography>
             </Box>
             {editMode ? (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
@@ -270,7 +270,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     )}
 
                     {(user?.id === comment.author.id && comment.status === 'active') && (
-                        <Button onClick={handleDisable} size="small" color="secondary" startIcon={<BlockIcon />}>
+                        <Button onClick={handleDisable} size="small" color="primary" startIcon={<BlockIcon />}>
                             Disable
                         </Button>
                     )}

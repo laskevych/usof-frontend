@@ -1,22 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import {Avatar, Box, Card, CardContent, Chip, LinearProgress, IconButton, Tooltip, Typography} from '@mui/material';
+import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useSelector } from "react-redux";
+import { Avatar, Box, Card, CardContent, Chip, LinearProgress, IconButton, Tooltip, Typography, Grid2 as Grid, Link } from '@mui/material';
 import axios from 'axios';
-import {Link as RouterLink, useParams} from 'react-router-dom';
-import Grid from "@mui/material/Grid2";
-
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-
 import EditIcon from '@mui/icons-material/Edit';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import {useSelector} from "react-redux";
-import { Link } from '@mui/material';
+
 import CommentsBlock from "../comment/CommentsBlock";
 
-function formatTimestamp(timestamp) {
+function formatCreatedAt(timestamp) {
     const date = new Date(timestamp);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' - ' +
         date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
@@ -29,21 +25,6 @@ function PostPage() {
     const [likes, setLikes] = useState([]);
     const [favoritePosts, setFavoritePosts] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const fetchPost = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get(`http://localhost:8080/api/posts/${id}`, {
-                headers: authToken
-                    ? { Authorization: `Bearer ${authToken}` }
-                    : {},
-            });
-            setPost(response.data.data);
-        } catch (error) {
-            console.error('Error fetching. ', error);
-        }
-        setLoading(false);
-    };
 
     const fetchLikes = async () => {
         try {
@@ -69,6 +50,21 @@ function PostPage() {
         } catch (error) {
             console.error('Error fetching. ', error);
         }
+    };
+
+    const fetchPost = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`http://localhost:8080/api/posts/${id}`, {
+                headers: authToken
+                    ? { Authorization: `Bearer ${authToken}` }
+                    : {},
+            });
+            setPost(response.data.data);
+        } catch (error) {
+            console.error('Error fetching. ', error);
+        }
+        setLoading(false);
     };
 
     const handleFavorite = async () => {
@@ -125,16 +121,16 @@ function PostPage() {
         }
     };
 
-    const userHasLiked = likes.some((like) => like.type === 'like' && like.author.id === user?.id);
-    const userHasDisliked = likes.some((like) => like.type === 'dislike' && like.author.id === user?.id);
     const userHasFavorited = favoritePosts.some((favoritePost) => favoritePost.id === post.id);
+    const userHasDisliked = likes.some((like) => like.type === 'dislike' && like.author.id === user?.id);
+    const userHasLiked = likes.some((like) => like.type === 'like' && like.author.id === user?.id);
 
     useEffect(() => {
         fetchPost();
-        fetchLikes();
         if (authToken) {
             fetchFavoritePosts();
         }
+        fetchLikes();
     }, [id]);
 
     if (loading) {
@@ -151,25 +147,10 @@ function PostPage() {
                 <Card
                     variant="outlined"
                     tabIndex={0}
-                    sx={{
-                        height: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        padding: 0,
-                        textDecoration: 'none'
-                    }}
+                    sx={{ height: '100%', display: 'flex', flexDirection: 'column', padding: 0, textDecoration: 'none' }}
                 >
                     <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 2,
-                            alignItems: 'center',
-                            padding: '16px',
-                            textDecoration: 'none',
-                            color: 'inherit',
-                            justifyContent: 'space-between'
-                        }}
+                        sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', padding: '16px', textDecoration: 'none', color: 'inherit', justifyContent: 'space-between' }}
                     >
                         <Box
                             sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
@@ -187,16 +168,10 @@ function PostPage() {
                             </Typography>
                         </Box>
 
-                        <Typography variant="caption">{formatTimestamp(post.createdAt)}</Typography>
+                        <Typography variant="caption">{formatCreatedAt(post.createdAt)}</Typography>
                     </Box>
                     <CardContent
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            justifyContent: 'space-between',
-                            height: '100%',
-                            pb: 0
-                        }}
+                        sx={{ display: 'flex',  flexDirection: 'column',  justifyContent: 'space-between',  height: '100%',  pb: 0 }}
                     >
                         <div>
                             <Typography gutterBottom variant="h6" component="div">
@@ -206,11 +181,7 @@ function PostPage() {
                                 variant="body2"
                                 color="text.secondary"
                                 gutterBottom
-                                sx={{
-                                    display: '-webkit-box',
-                                    WebkitBoxOrient: 'vertical',
-                                    overflow: 'hidden',
-                                    textOverflow: 'ellipsis'
+                                sx={{ display: '-webkit-box',  WebkitBoxOrient: 'vertical',  overflow: 'hidden',  textOverflow: 'ellipsis'
                                 }}
                             >
                                 {post.content}
@@ -298,7 +269,7 @@ function PostPage() {
                                         textDecoration: 'none'
                                     }}
                                 >
-                                    <ManageAccountsIcon sx={{ mr: 1 }} color="secondary" />
+                                    <ManageAccountsIcon sx={{ mr: 1 }} color="primary" />
                                     <Typography variant="body2" color="primary">Modify in Admin Panel</Typography>
                                 </Link>
                             )}

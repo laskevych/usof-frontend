@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField, Checkbox, ListItemText, OutlinedInput } from '@mui/material';
 import axios from 'axios';
+import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField, Checkbox, ListItemText, OutlinedInput, Grid2 as Grid } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import Grid from "@mui/material/Grid2";
-
 
 function Filters() {
     const [categories, setCategories] = useState([]);

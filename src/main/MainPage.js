@@ -1,17 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import PostList from '../post/PostList';
-import Grid from "@mui/material/Grid2";
-import {Box} from "@mui/material";
-import Filters from "./Filters";
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
-import {Link as RouterLink} from "react-router-dom";
 import axios from "axios";
+import {Link as RouterLink} from "react-router-dom";
+import {Box, Grid2 as Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
+import PostList from '../post/PostList';
+import Filters from "./Filters";
 
-function formatTimestamp(timestamp) {
+function formatCreatedAt(timestamp) {
     return (new Date(timestamp)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
@@ -26,7 +20,7 @@ const TopPostItem = ({post}) => {
                     src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
                 />
             </ListItemAvatar>
-            <ListItemText primary={post.title} secondary={formatTimestamp(post.createdAt)}/>
+            <ListItemText primary={post.title} secondary={formatCreatedAt(post.createdAt)}/>
         </ListItem>
     );
 };
