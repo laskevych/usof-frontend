@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import PostList from '../post/PostList';
 import Grid from "@mui/material/Grid2";
-import {Box, Chip} from "@mui/material";
+import {Box} from "@mui/material";
 import Filters from "./Filters";
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -11,42 +11,22 @@ import Avatar from '@mui/material/Avatar';
 import {Link as RouterLink} from "react-router-dom";
 import axios from "axios";
 
+function formatTimestamp(timestamp) {
+    return (new Date(timestamp)).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+}
 
-const HomePagePostItem = ({post}) => {
+const TopPostItem = ({post}) => {
     return (
-        <ListItem alignItems="flex-start" component={RouterLink} to={`/posts/${post.id}/`} sx={{
-            textDecoration: 'none',
-            color: 'black'
-        }}>
+        <ListItem alignItems="flex-start" component={RouterLink} to={`/posts/${post.id}/`} sx={{textDecoration: 'none', color: 'white'}}>
             <ListItemAvatar>
                 <Avatar
-                    key={post.author.id}
                     alt={post.author.login}
-                    src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
+                    key={post.author.id}
                     component={RouterLink} to={`/users/${post.author.id}/`}
+                    src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
                 />
             </ListItemAvatar>
-            <ListItemText
-                primary={post.title}
-                secondary={
-                    <React.Fragment>
-                        <Box sx={{ mt: 1 }}>
-                            {post.categories.map((category) => (
-                                <Chip
-                                    key={category.id}
-                                    label={category.title}
-                                    component={RouterLink}
-                                    to={`/categories/${category.id}/posts`}
-                                    clickable
-                                    sx={{ mr: 1, mb: 1 }}
-                                    color="default"
-                                    variant="outlined"
-                                />
-                            ))}
-                        </Box>
-                    </React.Fragment>
-                }
-            />
+            <ListItemText primary={post.title} secondary={formatTimestamp(post.createdAt)}/>
         </ListItem>
     );
 };
@@ -56,53 +36,34 @@ function MainPage() {
     const [posts, setPosts] = useState([]);
 
     useEffect(() => {
-        const fetchPostsForHomePage = async () => {
+        const fetchTopPosts = async () => {
             try {
-                const response = await axios.get(`http://localhost:8080/api/posts/?isTop=1&status=active&sortBy=rating:desc`);
+                const response = await axios.get(`http://localhost:8080/api/posts/?isTop=1&sortBy=rating:desc&status=active`);
                 setPosts(response.data.data);
             } catch (error) {
-                console.error('Error fetching comments:', error);
+                console.error('Error fetching posts:', error);
             }
         };
 
-        fetchPostsForHomePage();
+        fetchTopPosts();
     }, []);
 
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
             <Grid container spacing={1}>
-                <Grid size={{ xs: 12, md: 4 }}>
-                    <div>
-                        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                            {posts.map((post, index) => (
-                                (index === 0 || index === 1) && (
-                                    <HomePagePostItem key={post.id} post={post} />
-                                )
-                            ))}
-                        </List>
-                    </div>
+                <Grid size={{ xs: 12, md: 6 }}>
+                    <List sx={{ width: '100%'}}>
+                        {posts.map((post, index) => (
+                            (index === 0 || index === 1) && (<TopPostItem key={post.id} post={post} />)
+                        ))}
+                    </List>
                 </Grid>
-                <Grid size={{ xs: 12, md: 4 }}>
-                    <div>
-                        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                            {posts.map((post, index) => (
-                                (index === 2 || index === 3) && (
-                                    <HomePagePostItem key={post.id} post={post} />
-                                )
-                            ))}
-                        </List>
-                    </div>
-                </Grid>
-                <Grid size={{ xs: 12, md: 4 }}>
-                    <div>
-                        <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                            {posts.map((post, index) => (
-                                (index === 4 || index === 5) && (
-                                    <HomePagePostItem key={post.id} post={post} />
-                                )
-                            ))}
-                        </List>
-                    </div>
+                <Grid size={{ xs: 12, md: 6 }}>
+                    <List sx={{ width: '100%'}}>
+                        {posts.map((post, index) => (
+                            (index === 2 || index === 3) && (<TopPostItem key={post.id} post={post} />)
+                        ))}
+                    </List>
                 </Grid>
             </Grid>
             <Grid container spacing={2}>

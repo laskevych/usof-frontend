@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link as RouterLink } from 'react-router-dom';
-import {Box, Avatar, Typography, Button, Card, CircularProgress, Chip, Badge} from '@mui/material';
+import {Box, Avatar, Typography, Button, Card, LinearProgress, Chip, Badge} from '@mui/material';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
@@ -70,7 +70,7 @@ function UserProfilePage() {
     if (loading) {
         return (
             <Box sx={{ textAlign: 'center', mt: 5 }}>
-                <CircularProgress />
+                <LinearProgress color="success" />
             </Box>
         );
     }

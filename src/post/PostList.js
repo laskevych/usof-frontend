@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Box, Pagination, CircularProgress } from '@mui/material';
+import {Box, Pagination, LinearProgress, Typography} from '@mui/material';
 import axios from 'axios';
 import PostItem from './PostItem';
 import {useLocation, useNavigate} from 'react-router-dom';
@@ -43,20 +43,20 @@ function PostList() {
     if (loading) {
         return (
             <Box sx={{ textAlign: 'center', mt: 5 }}>
-                <CircularProgress />
+                <LinearProgress color="success" />
             </Box>
         );
     }
 
     return (
-        <Grid size={{ xs: 12, md: 9 }}>
-            <Box
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
-            >
+        <Box sx={{ width: '100%' }}>
+            <Grid container rowSpacing={2} columnSpacing={{ xs: 2, sm: 2, md: 2 }}>
                 {posts.map((post) => (
-                    <PostItem key={post.id} post={post} />
+                    <Grid size={{ xs: 12, md: 6 }} key={post.id}>
+                        <PostItem post={post} />
+                    </Grid>
                 ))}
-            </Box>
+            </Grid>
 
             {pagination && pagination.totalPages > 1 && (
                 <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
@@ -68,7 +68,7 @@ function PostList() {
                     />
                 </Box>
             )}
-        </Grid>
+        </Box>
     );
 }
 

@@ -1,48 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import {Avatar, Box, Card, CardContent, Chip, CircularProgress, IconButton, Tooltip, Typography} from '@mui/material';
+import {Avatar, Box, Card, CardContent, Chip, LinearProgress, IconButton, Tooltip, Typography} from '@mui/material';
 import axios from 'axios';
 import {Link as RouterLink, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+
 import EditIcon from '@mui/icons-material/Edit';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import {styled} from "@mui/material/styles";
 import {useSelector} from "react-redux";
 import { Link } from '@mui/material';
-import BookmarkAddIcon from '@mui/icons-material/BookmarkAdd';
-import BookmarkAddedIcon from '@mui/icons-material/BookmarkAdded';
 import CommentsBlock from "../comment/CommentsBlock";
-
-const StyledCard = styled(Card)(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    padding: 0,
-    height: '100%',
-    backgroundColor: (theme.vars || theme).palette.background.paper,
-    textDecoration: 'none'
-}));
-
-const StyledCardContent = styled(CardContent)({
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 4,
-    padding: 16,
-    flexGrow: 1
-});
-
-const StyledTypography = styled(Typography)({
-    display: '-webkit-box',
-    WebkitBoxOrient: 'vertical',
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-});
 
 function formatTimestamp(timestamp) {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' - ' +
         date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 }
 
@@ -158,20 +134,24 @@ function PostPage() {
     if (loading) {
         return (
             <Box sx={{ textAlign: 'center', mt: 5 }}>
-                <CircularProgress />
+                <LinearProgress color="success" />
             </Box>
         );
     }
 
     return (
         <Grid size={{ xs: 12, md: 8 }}>
-            <Box
-                sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}
-            >
-                <StyledCard
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}>
+                <Card
                     variant="outlined"
                     tabIndex={0}
-                    sx={{ height: '100%' }}
+                    sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        padding: 0,
+                        textDecoration: 'none'
+                    }}
                 >
                     <Box
                         sx={{
@@ -181,7 +161,8 @@ function PostPage() {
                             alignItems: 'center',
                             padding: '16px',
                             textDecoration: 'none',
-                            color: 'inherit'
+                            color: 'inherit',
+                            justifyContent: 'space-between'
                         }}
                     >
                         <Box
@@ -193,16 +174,16 @@ function PostPage() {
                                 key={post.author.id}
                                 alt={post.author.login}
                                 src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                                sx={{ width: 36, height: 36 }}
+                                sx={{ width: 48, height: 48 }}
                             />
                             <Typography variant="caption">
                                 {post.author.fullName || post.author.login}
                             </Typography>
                         </Box>
-                        <Typography>•</Typography>
+
                         <Typography variant="caption">{formatTimestamp(post.createdAt)}</Typography>
                     </Box>
-                    <StyledCardContent
+                    <CardContent
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -215,13 +196,19 @@ function PostPage() {
                             <Typography gutterBottom variant="h6" component="div">
                                 {post.title}
                             </Typography>
-                            <StyledTypography
+                            <Typography
                                 variant="body2"
                                 color="text.secondary"
                                 gutterBottom
+                                sx={{
+                                    display: '-webkit-box',
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden',
+                                    textOverflow: 'ellipsis'
+                                }}
                             >
                                 {post.content}
-                            </StyledTypography>
+                            </Typography>
                             <Box sx={{ mt: 1 }}>
                                 {post.categories.map((category) => (
                                     <Chip
@@ -237,7 +224,7 @@ function PostPage() {
                                 ))}
                             </Box>
                         </div>
-                    </StyledCardContent>
+                    </CardContent>
 
                     <Box
                         sx={{
@@ -254,7 +241,7 @@ function PostPage() {
                                 onClick={handleLike}
                                 disabled={!authToken}
                             >
-                                {userHasLiked ? <ThumbUpIcon color="success" /> : <ThumbUpOutlinedIcon />}
+                                {userHasLiked ? <ArrowUpwardIcon color="success" /> : <ArrowUpwardIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'like').length}</Typography>
 
@@ -262,14 +249,14 @@ function PostPage() {
                                 onClick={handleDislike}
                                 disabled={!authToken}
                             >
-                                {userHasDisliked ? <ThumbDownIcon color="error" /> : <ThumbDownOffAltIcon />}
+                                {userHasDisliked ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'dislike').length}</Typography>
 
                             {user && (
                                 <Tooltip title="Save" placement="top">
                                     <IconButton onClick={handleFavorite} disabled={!authToken}>
-                                        {userHasFavorited ? <BookmarkAddedIcon color="success" /> : <BookmarkAddIcon />}
+                                        {userHasFavorited ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
                                     </IconButton>
                                 </Tooltip>
                             )}
@@ -311,7 +298,7 @@ function PostPage() {
                             )}
                         </Box>
                     </Box>
-                </StyledCard>
+                </Card>
             </Box>
 
             <CommentsBlock post={post}/>

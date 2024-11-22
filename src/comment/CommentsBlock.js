@@ -3,18 +3,19 @@ import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip} from '@
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-import AddIcon from "@mui/icons-material/Add";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbUpOutlinedIcon from "@mui/icons-material/ThumbUpOutlined";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import ThumbDownOffAltIcon from "@mui/icons-material/ThumbDownOffAlt";
+
+import AddCommentIcon from '@mui/icons-material/AddComment';
+
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 import SaveIcon from '@mui/icons-material/Save';
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import BlockIcon from '@mui/icons-material/Block';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
-import ReplyIcon from '@mui/icons-material/Reply';
+import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 function formatTimestamp(timestamp) {
@@ -208,7 +209,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         disabled={!authToken}
                         size="small"
                     >
-                        {userHasLiked ? <ThumbUpIcon color="success"/> : <ThumbUpOutlinedIcon />}
+                        {userHasLiked ? <ArrowUpwardIcon color="success"/> : <ArrowUpwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'like').length}</Typography>
 
@@ -216,7 +217,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         onClick={handleDislike}
                         disabled={!authToken}
                     >
-                        {userHasDisliked ? <ThumbDownIcon color="error" /> : <ThumbDownOffAltIcon />}
+                        {userHasDisliked ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'dislike').length}</Typography>
 
@@ -236,7 +237,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     }
 
                     {authToken && level < 2 && (
-                        <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" startIcon={<ReplyIcon />}>
+                        <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" color="success" startIcon={<ReplyAllIcon color="success" />}>
                             Reply
                         </Button>
                     )}
@@ -268,7 +269,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     )}
 
                     {(user?.id === comment.author.id && comment.status === 'active') && (
-                        <Button onClick={handleDisable} size="small" color="secondary" startIcon={<VisibilityOffIcon />}>
+                        <Button onClick={handleDisable} size="small" color="secondary" startIcon={<BlockIcon />}>
                             Disable
                         </Button>
                     )}
@@ -287,13 +288,13 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
                             <TextField
                                 fullWidth
-                                placeholder="Write reply..."
+                                placeholder="Add a reply"
                                 value={replyContent}
                                 onChange={(e) => setReplyContent(e.target.value)}
                                 multiline
                                 size="small"
                             />
-                            <Button onClick={handleAddReply} variant="contained" color="success" startIcon={<AddIcon />}>Comment</Button>
+                            <Button onClick={handleAddReply} variant="contained" color="success" startIcon={<AddCommentIcon />}>Add</Button>
                         </Box>
                     )}
                 </>
@@ -360,12 +361,12 @@ function CommentsBlock({ post }) {
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <TextField
                         fullWidth
-                        placeholder="Write a comment..."
+                        placeholder="Add a comment"
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         multiline
                     />
-                    <Button onClick={handleAddComment} variant="contained" color="success" startIcon={<AddIcon />}>Comment</Button>
+                    <Button onClick={handleAddComment} variant="contained" color="success" startIcon={<AddCommentIcon />}>Add</Button>
                 </Box>
             )}
             {comments.map(comment => (

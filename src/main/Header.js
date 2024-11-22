@@ -1,54 +1,23 @@
 import React from 'react';
-import {
-    AppBar,
-    Toolbar,
-    Button,
-    Avatar,
-    IconButton,
-    Container,
-    Box,
-    alpha,
-    Drawer,
-    MenuItem, Divider
-} from '@mui/material';
+import { AppBar, Toolbar, Button, Avatar, IconButton, Container, Box, alpha, Drawer, MenuItem, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import {styled} from "@mui/material/styles";
 import { useDispatch, useSelector } from 'react-redux';
 import Typography from "@mui/material/Typography";
 import LogoutIcon from '@mui/icons-material/Logout';
 import { logout } from '../store/userSlice';
 import WebhookIcon from '@mui/icons-material/Webhook';
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 
 function Header() {
     const { authToken, user } = useSelector((state) => state.user);
-
     const [open, setOpen] = React.useState(false);
-
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
     };
-
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    const StyledToolbar = styled(Toolbar)(({ theme }) => ({
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexShrink: 0,
-        borderRadius: `calc(${theme.shape.borderRadius}px + 8px)`,
-        backdropFilter: 'blur(24px)',
-        border: '1px solid',
-        borderColor: (theme.vars || theme).palette.divider,
-        backgroundColor: theme.vars
-            ? `rgba(${theme.vars.palette.background.defaultChannel} / 0.4)`
-            : alpha(theme.palette.background.default, 0.4),
-        boxShadow: (theme.vars || theme).shadows[1],
-        padding: '8px 12px',
-    }));
-
+    const navigate = useNavigate();
     const handleLogout = () => {
         dispatch(logout());
         navigate('/');
@@ -60,21 +29,36 @@ function Header() {
             enableColorOnDark
             sx={{
                 boxShadow: 0,
-                bgcolor: 'transparent',
+                mt: 'calc(var(--template-frame-height, 0px) + 30px)',
                 backgroundImage: 'none',
-                mt: 'calc(var(--template-frame-height, 0px) + 28px)',
+                bgcolor: 'transparent'
             }}
         >
             <Container maxWidth="lg">
-                <StyledToolbar variant="dense" disableGutters>
+                <Toolbar variant="dense" disableGutters sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    backdropFilter: 'blur(50px)',
+                    justifyContent: 'space-between',
+                    flexShrink: 0,
+                    border: '1px solid',
+                    padding: '10px 10px'
+                }}>
                     <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', px: 0 }}>
                         <WebhookIcon color="success" fontSize="large"/>
-                        <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                        <Box sx={{ display: { xs: 'none', md: 'flex', gap: 5} }}>
                             <Button variant="text" color="success" size="small" sx={{textTransform: 'none'}} component={RouterLink} to={`/`}>
                                 DevSync
                             </Button>
+                            {authToken && user && (
+                                <Button fullWidth variant="contained" color="success" startIcon={<PostAddIcon />}
+                                        component={RouterLink}
+                                        to="/posts/create">
+                                    Add post
+                                </Button>
+                            )}
                             {authToken && user?.role === 'admin' && (
-                                <Button variant="text" color="secondary" size="large" href="http://localhost:8080/admin" target="_blank" startIcon={<AdminPanelSettingsIcon fontSize="large" color="secondary"/>}>
+                                <Button variant="text" color="primary" target="_blank" size="large" href="http://localhost:8080/admin" startIcon={<AdminPanelSettingsIcon fontSize="large" color="primary"/>}>
                                     Admin Panel
                                 </Button>
                             )}
@@ -83,20 +67,20 @@ function Header() {
                     <Box
                         sx={{
                             display: { xs: 'none', md: 'flex' },
-                            gap: 1,
+                            gap: 3,
                             alignItems: 'center',
                         }}
                     >
                     {authToken && user ? (
                         <>
-                            <Box sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'black' }}>
+                            <Box sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}>
                                 <IconButton component={RouterLink} to={`/users/${user.id}`} sx={{ p: 0 }}>
                                     <Avatar alt={user.login} src={`http://localhost:8080/profile-pictures/${user.profilePicture}`} />
                                 </IconButton>
-                                <Typography variant="body2" sx={{ml: 1}}>
+                                <Typography variant="body2" sx={{ml: 1, color: "white"}}>
                                     {user.fullName || user.login}
                                 </Typography>
-                                <IconButton onClick={handleLogout} color="inherit">
+                                <IconButton onClick={handleLogout} color="success">
                                     <LogoutIcon />
                                 </IconButton>
                             </Box>
@@ -138,6 +122,9 @@ function Header() {
                                 </Box>
 
                                 <MenuItem component={RouterLink} to={`/`}>Posts</MenuItem>
+                                {authToken && user && (
+                                    <MenuItem component={RouterLink} to="/posts/create"><PostAddIcon /> Add post</MenuItem>
+                                )}
                                 {authToken && user?.role === 'admin' && (
                                     <MenuItem href="http://localhost:8080/admin" target="_blank">Admin Panel</MenuItem>
                                 )}
@@ -170,7 +157,7 @@ function Header() {
                             </Box>
                         </Drawer>
                     </Box>
-                </StyledToolbar>
+                </Toolbar>
             </Container>
         </AppBar>
     );

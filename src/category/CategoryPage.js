@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Pagination, CircularProgress, Chip} from '@mui/material';
+import {Box, Pagination, LinearProgress, Chip} from '@mui/material';
 import axios from 'axios';
 import PostItem from '../post/PostItem';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
@@ -61,7 +61,7 @@ function CategoryPage() {
     if (loading) {
         return (
             <Box sx={{ textAlign: 'center', mt: 5 }}>
-                <CircularProgress />
+                <LinearProgress color="success" />
             </Box>
         );
     }
