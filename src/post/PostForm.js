@@ -47,11 +47,11 @@ function PostForm({ post, onSubmit, onDelete }) {
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 const validationErrors = error.response.data.validationErrors;
-                const newErrors = {};
+                const formErrors = {};
                 validationErrors.forEach((err) => {
-                    newErrors[err.path] = err.msg;
+                    formErrors[err.path] = err.msg;
                 });
-                setErrors(newErrors);
+                setErrors(formErrors);
             }
         }
     };
@@ -62,6 +62,7 @@ function PostForm({ post, onSubmit, onDelete }) {
                 {post ? 'Edit Post' : 'Create Post'}
             </Typography>
             <TextField
+                color="success"
                 label="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
@@ -72,6 +73,7 @@ function PostForm({ post, onSubmit, onDelete }) {
                 helperText={errors.title}
             />
             <TextField
+                color="success"
                 label="Content"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}

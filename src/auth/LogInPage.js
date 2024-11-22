@@ -1,38 +1,18 @@
 import React, { useState } from 'react';
 import { styled } from '@mui/material/styles';
-import {Container, TextField, Button, Typography, Link, Box, Grid2 as Grid} from '@mui/material';
+import {Container, TextField, Button, Typography, Link, Grid2 as Grid} from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setUser } from '../store/userSlice';
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-    display: 'flex',
-    minHeight: '50vh',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.default,
-}));
+const StyledForm = styled('form')(({ theme }) => ({ width: '100%', maxWidth: 400 }));
 
-const StyledForm = styled('form')(({ theme }) => ({
-    width: '100%',
-    maxWidth: 400,
-    padding: theme.spacing(4),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-}));
-
-function SignInPage() {
-    const [formData, setFormData] = useState({
-        login: '',
-        password: '',
-    });
-
+function LogInPage() {
+    const [formData, setFormData] = useState({ login: '', password: '',});
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -40,10 +20,9 @@ function SignInPage() {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         setErrors({});
-
         try {
             const response = await axios.post('http://localhost:8080/api/auth/login', formData);
 
@@ -57,16 +36,16 @@ function SignInPage() {
         } catch (error) {
             if (error.response && error.response.data) {
                 const validationErrors = error.response.data.validationErrors;
-                const newErrors = {};
+                const formErrors = {};
 
                 validationErrors.forEach((err) => {
                     const field = err.path;
-                    if (!newErrors[field]) {
-                        newErrors[field] = err.msg;
+                    if (!formErrors[field]) {
+                        formErrors[field] = err.msg;
                     }
                 });
 
-                setErrors(newErrors);
+                setErrors(formErrors);
             } else {
                 console.error('Login error:', error);
             }
@@ -74,64 +53,65 @@ function SignInPage() {
     };
 
     return (
-        <StyledContainer>
-            <StyledForm onSubmit={handleSubmit}>
-                <Typography variant="h5" align="center" gutterBottom>
-                    Sign in
-                </Typography>
-
+        <Container sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            minHeight: '50vh',
+            alignItems: 'center'
+        }}>
+            <StyledForm onSubmit={handleLogin}>
+                <Typography variant="h5" align="center" gutterBottom>Log In</Typography>
                 <TextField
-                    variant="outlined"
+                    color="success"
                     margin="normal"
+                    variant="outlined"
                     required
                     fullWidth
+                    value={formData.login}
+                    onChange={handleChange}
+                    helperText={errors.login}
                     id="login"
                     label="Login"
                     name="login"
-                    autoComplete="username"
-                    value={formData.login}
-                    onChange={handleChange}
                     error={!!errors.login}
-                    helperText={errors.login}
+                    autoComplete="username"
                 />
-
                 <TextField
+                    color="success"
                     variant="outlined"
+                    value={formData.password}
                     margin="normal"
                     required
                     fullWidth
+                    error={!!errors.password}
                     name="password"
                     label="Password"
                     type="password"
+                    onChange={handleChange}
                     id="password"
                     autoComplete="current-password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    error={!!errors.password}
                     helperText={errors.password}
                 />
-
                 <Button
+                    color="success"
                     type="submit"
+                    sx={{ mt: 2 }}
                     fullWidth
                     variant="contained"
-                    sx={{ mt: 2 }}
                 >
-                    Sign in
+                    Log In
                 </Button>
 
-                <Grid container spacing={2} sx={{ mt: 3 }}>
+                <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid size={12}>
-                        <Box>
-                            <Typography align="center">
-                                <Link href="/password-reset">Forgot your password?</Link>
-                            </Typography>
-                        </Box>
+                        <Typography align="center" color="success">
+                            <Link color="success" href="/password-reset">Password Reset</Link>
+                        </Typography>
                     </Grid>
                 </Grid>
             </StyledForm>
-        </StyledContainer>
+        </Container>
     );
 }
 
-export default SignInPage;
+export default LogInPage;

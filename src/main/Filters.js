@@ -3,8 +3,6 @@ import { Box, FormControl, InputLabel, Select, MenuItem, Button, TextField, Chec
 import axios from 'axios';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
-import PostAddIcon from '@mui/icons-material/PostAdd';
-import { Link as RouterLink } from 'react-router-dom';
 
 
 function Filters() {
@@ -110,10 +108,10 @@ function Filters() {
                         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, mb: 2 }}>
                             <FormControl color="success" size="small" fullWidth>
                                 <TextField
+                                    color="success"
                                     label="Publish Date From"
                                     type="date"
                                     value={createdAtFrom}
-                                    color="success"
                                     onChange={(e) => setCreatedAtStartStart(e.target.value)}
                                     InputLabelProps={{
                                         shrink: true,

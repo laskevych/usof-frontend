@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Toolbar, Button, Avatar, IconButton, Container, Box, alpha, Drawer, MenuItem, Divider } from '@mui/material';
+import { AppBar, Toolbar, Button, Avatar, IconButton, Container, Box, Drawer, MenuItem, Divider } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,11 +87,11 @@ function Header() {
                         </>
                         ) : (
                         <>
-                            <Button color="success" variant="text" size="small" component={RouterLink} to={`/sign-in/`}>
-                                Sign in
+                            <Button color="success" variant="text" size="small" component={RouterLink} to={`/log-in/`}>
+                                Log in
                             </Button>
-                            <Button color="success" variant="contained" size="small" component={RouterLink} to={`/sign-up/`}>
-                                Sign up
+                            <Button color="success" variant="contained" size="small" component={RouterLink} to={`/join/`}>
+                                Join
                             </Button>
                         </>
                         )}
@@ -143,13 +143,13 @@ function Header() {
                                 ) : (
                                     <>
                                         <MenuItem>
-                                            <Button color="success" variant="contained" fullWidth component={RouterLink} to="/sign-up" onClick={toggleDrawer(false)}>
-                                                Sign up
+                                            <Button color="success" variant="contained" fullWidth component={RouterLink} to="/join" onClick={toggleDrawer(false)}>
+                                                Join
                                             </Button>
                                         </MenuItem>
                                         <MenuItem>
-                                            <Button color="success" variant="outlined" fullWidth component={RouterLink} to="/sign-in" onClick={toggleDrawer(false)}>
-                                                Sign in
+                                            <Button color="success" variant="outlined" fullWidth component={RouterLink} to="/log-in" onClick={toggleDrawer(false)}>
+                                                Log in
                                             </Button>
                                         </MenuItem>
                                     </>

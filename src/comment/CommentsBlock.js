@@ -184,6 +184,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             {editMode ? (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <TextField
+                        color="success"
                         fullWidth
                         multiline
                         value={content}
@@ -287,6 +288,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     {showReplyForm && (
                         <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
                             <TextField
+                                color="success"
                                 fullWidth
                                 placeholder="Add a reply"
                                 value={replyContent}
@@ -360,6 +362,7 @@ function CommentsBlock({ post }) {
             {authToken && (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
                     <TextField
+                        color="success"
                         fullWidth
                         placeholder="Add a comment"
                         value={newComment}

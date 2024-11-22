@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import SignInPage from './auth/SignInPage';
-import SignUpPage from './auth/SignUpPage';
+import LogInPage from './auth/LogInPage';
+import JoinPage from './auth/JoinPage';
 import ConfirmEmailPage from './auth/ConfirmEmailPage';
 import MainPage from './main/MainPage';
 import { AuthProvider } from './auth/AuthContext';
@@ -52,18 +52,18 @@ function App() {
                         >
                             <Routes>
                                 <Route
-                                    path="/sign-in"
+                                    path="/log-in"
                                     element={
                                         <GuestRoute>
-                                            <SignInPage />
+                                            <LogInPage />
                                         </GuestRoute>
                                     }
                                 />
                                 <Route
-                                    path="/sign-up"
+                                    path="/join"
                                     element={
                                         <GuestRoute>
-                                            <SignUpPage />
+                                            <JoinPage />
                                         </GuestRoute>
                                     }
                                 />

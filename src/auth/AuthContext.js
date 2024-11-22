@@ -13,31 +13,27 @@ export function AuthProvider({ children }) {
     if (authToken) {
       localStorage.setItem('authToken', authToken);
       axios
-        .get('http://localhost:8080/api/auth/user', {
-          headers: { Authorization: `Bearer ${authToken}` },
-        })
+        .get('http://localhost:8080/api/auth/user', { headers: { Authorization: `Bearer ${authToken}` }})
         .then((response) => {
           setUser(response.data);
         })
         .catch((error) => {
-          console.error('Error fetching user data:', error);
-          setAuthToken(null);
+          console.error('Error fetching. ', error);
           setUser(null);
+          setAuthToken(null);
         });
     } else {
-      localStorage.removeItem('authToken');
       setUser(null);
+      localStorage.removeItem('authToken');
     }
   }, [authToken]);
 
   const logout = () => {
-    setAuthToken(null);
     setUser(null);
+    setAuthToken(null);
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, setAuthToken, logout, user }}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={{ authToken, setAuthToken, logout, user }}>{children}</AuthContext.Provider>
   );
 }

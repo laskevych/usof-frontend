@@ -77,11 +77,11 @@ function UserEditPage() {
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 const validationErrors = error.response.data.validationErrors;
-                const newErrors = {};
+                const formErrors = {};
                 validationErrors.forEach((err) => {
-                    newErrors[err.path] = err.msg;
+                    formErrors[err.path] = err.msg;
                 });
-                setErrors(newErrors);
+                setErrors(formErrors);
             }
         }
     };
@@ -132,6 +132,7 @@ function UserEditPage() {
                 Save Avatar
             </Button>
             <TextField
+                color="success"
                 label="Full Name"
                 name="fullName"
                 value={formData.fullName}
@@ -143,6 +144,7 @@ function UserEditPage() {
                 helperText={errors.fullName}
             />
             <TextField
+                color="success"
                 label="New Password"
                 name="password"
                 type="password"
@@ -154,6 +156,7 @@ function UserEditPage() {
                 helperText={errors.password}
             />
             <TextField
+                color="success"
                 label="Confirm Password"
                 name="password_confirm"
                 type="password"

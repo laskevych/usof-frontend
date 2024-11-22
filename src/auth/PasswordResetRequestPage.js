@@ -5,42 +5,24 @@ import axios from 'axios';
 import { AuthContext } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-    display: 'flex',
-    minHeight: '50vh',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.default,
-}));
-
-const StyledForm = styled('form')(({ theme }) => ({
-    width: '100%',
-    maxWidth: 400,
-    padding: theme.spacing(4),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-}));
+const StyledForm = styled('form')(({ theme }) => ({ width: '100%', maxWidth: 400 }));
 
 function PasswordResetRequestPage() {
+    const { authToken } = useContext(AuthContext);
+    const [error, setError] = useState('');
     const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
-    const [error, setError] = useState('');
-    const { authToken } = useContext(AuthContext);
-
-    // Якщо користувач авторизований, перенаправляємо на головну сторінку
     if (authToken) {
         return <Navigate to="/" />;
     }
 
-    const handleSubmit = async (e) => {
+    const handlePasswordResetRequest = async (e) => {
         e.preventDefault();
         setMessage('');
         setError('');
 
         try {
             const response = await axios.post('http://localhost:8080/api/auth/password-reset/', { email });
-
             if (response.status === 200) {
                 setMessage('An email has been sent to you to reset your password.');
             }
@@ -50,8 +32,8 @@ function PasswordResetRequestPage() {
     };
 
     return (
-        <StyledContainer>
-            <StyledForm onSubmit={handleSubmit}>
+        <Container sx={{ display: 'flex', justifyContent: 'center', minHeight: '50vh', alignItems: 'center'}}>
+            <StyledForm onSubmit={handlePasswordResetRequest}>
                 <Typography variant="h5" align="center" gutterBottom>
                     Password Reset
                 </Typography>
@@ -71,6 +53,7 @@ function PasswordResetRequestPage() {
                 {!message && (
                     <>
                         <TextField
+                            color="success"
                             variant="outlined"
                             margin="normal"
                             required
@@ -94,7 +77,7 @@ function PasswordResetRequestPage() {
                     </>
                 )}
             </StyledForm>
-        </StyledContainer>
+        </Container>
     );
 }
 

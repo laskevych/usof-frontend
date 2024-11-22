@@ -5,37 +5,21 @@ import { Container, TextField, Button, Typography, Link } from '@mui/material';
 import axios from 'axios';
 import { AuthContext } from './AuthContext';
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-    display: 'flex',
-    minHeight: '50vh',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.default,
-}));
-
-const StyledForm = styled('form')(({ theme }) => ({
-    width: '100%',
-    maxWidth: 400,
-    padding: theme.spacing(4),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-}));
+const StyledForm = styled('form')(({ theme }) => ({ width: '100%', maxWidth: 400 }));
 
 function PasswordResetConfirmPage() {
-    const { confirm_token } = useParams();
+    const { authToken } = useContext(AuthContext);
     const [formData, setFormData] = useState({
         password: '',
         password_confirm: '',
     });
-    const [errors, setErrors] = useState({});
+    const { confirm_token } = useParams();
     const [message, setMessage] = useState('');
-    const { authToken } = useContext(AuthContext);
-
+    const [errors, setErrors] = useState({});
     if (authToken) {
         return <Navigate to="/" />;
     }
-
+    
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -43,7 +27,7 @@ function PasswordResetConfirmPage() {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handlePasswordResetConfirm = async (e) => {
         e.preventDefault();
         setErrors({});
         setMessage('');
@@ -60,41 +44,35 @@ function PasswordResetConfirmPage() {
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 const validationErrors = error.response.data.validationErrors;
-                const newErrors = {};
-
+                const formErrors = {};
                 validationErrors.forEach((err) => {
                     const field = err.path;
-                    if (!newErrors[field]) {
-                        newErrors[field] = err.msg;
+                    if (!formErrors[field]) {
+                        formErrors[field] = err.msg;
                     }
                 });
 
-                setErrors(newErrors);
+                setErrors(formErrors);
             } else {
-                setMessage('An error occurred. Please try again.');
+                setMessage('Please try again.');
             }
         }
     };
 
     return (
-        <StyledContainer>
-            <StyledForm onSubmit={handleSubmit}>
-                <Typography variant="h5" align="center" gutterBottom>
-                    Reset Password
-                </Typography>
+        <Container sx={{ display: 'flex', justifyContent: 'center', minHeight: '50vh', alignItems: 'center'}}>
+            <StyledForm onSubmit={handlePasswordResetConfirm}>
+                <Typography variant="h5" align="center" gutterBottom>Reset Password</Typography>
 
                 {message === 'success' && (
-                    <Typography variant="body1" align="center" color="success.main" gutterBottom>
+                    <Typography variant="body1" align="center" color="success" gutterBottom>
                         Your password has been changed. You can{' '}
-                        <Link href="/sign-in/">
-                            log in
-                        </Link>
-                        .
+                        <Link color="success" href="/log-in/">Log In</Link>.
                     </Typography>
                 )}
 
                 {message && message !== 'success' && (
-                    <Typography variant="body1" align="center" color="error.main" gutterBottom>
+                    <Typography variant="body1" align="center" color="error" gutterBottom>
                         {message}
                     </Typography>
                 )}
@@ -102,49 +80,45 @@ function PasswordResetConfirmPage() {
                 {!message && (
                     <>
                         <TextField
+                            color="success"
                             variant="outlined"
                             margin="normal"
+                            helperText={errors.password}
                             required
                             fullWidth
                             name="password"
                             label="New Password"
+                            value={formData.password}
                             type="password"
                             id="password"
                             autoComplete="new-password"
-                            value={formData.password}
                             onChange={handleChange}
                             error={!!errors.password}
-                            helperText={errors.password}
+                            
                         />
 
                         <TextField
+                            error={!!errors.password_confirm}
+                            color="success"
                             variant="outlined"
                             margin="normal"
                             required
+                            value={formData.password_confirm}
                             fullWidth
                             name="password_confirm"
                             label="Confirm New Password"
                             type="password"
+                            helperText={errors.password_confirm}
                             id="password_confirm"
                             autoComplete="new-password"
-                            value={formData.password_confirm}
                             onChange={handleChange}
-                            error={!!errors.password_confirm}
-                            helperText={errors.password_confirm}
                         />
 
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{ mt: 2 }}
-                        >
-                            Submit
-                        </Button>
+                        <Button type="submit" fullWidth variant="contained" sx={{ mt: 3 }}>Submit</Button>
                     </>
                 )}
             </StyledForm>
-        </StyledContainer>
+        </Container>
     );
 }
 

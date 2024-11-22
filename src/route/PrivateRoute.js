@@ -6,7 +6,7 @@ function PrivateRoute({ children }) {
   const { authToken } = useContext(AuthContext);
 
   if (!authToken) {
-    return <Navigate to="/sign-in" />;
+    return <Navigate to="/log-in" />;
   }
 
   return children;

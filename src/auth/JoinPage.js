@@ -5,24 +5,9 @@ import axios from 'axios';
 import { AuthContext } from './AuthContext';
 import { Navigate } from 'react-router-dom';
 
-const StyledContainer = styled(Container)(({ theme }) => ({
-    display: 'flex',
-    minHeight: '50vh',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: theme.palette.background.default,
-}));
+const StyledForm = styled('form')(({ theme }) => ({ width: '100%', maxWidth: 500 }));
 
-const StyledForm = styled('form')(({ theme }) => ({
-    width: '100%',
-    maxWidth: 500,
-    padding: theme.spacing(4),
-    backgroundColor: theme.palette.background.paper,
-    borderRadius: theme.shape.borderRadius,
-    boxShadow: theme.shadows[3],
-}));
-
-function SignUpPage() {
+function JoinPage() {
     const [formData, setFormData] = useState({
         login: '',
         email: '',
@@ -32,9 +17,7 @@ function SignUpPage() {
     });
 
     const [errors, setErrors] = useState({});
-
     const [registeredEmail, setRegisteredEmail] = useState('');
-
     const { authToken } = useContext(AuthContext);
     if (authToken) {
         return <Navigate to="/" />;
@@ -47,29 +30,28 @@ function SignUpPage() {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleJoin = async (e) => {
         e.preventDefault();
         setErrors({});
 
         try {
             const response = await axios.post('http://localhost:8080/api/auth/register', formData);
-
             if (response.status === 201) {
                 setRegisteredEmail(response.data.data.email);
             }
         } catch (error) {
             if (error.response && error.response.data) {
                 const validationErrors = error.response.data.validationErrors;
-                const newErrors = {};
+                const formErrors = {};
 
                 validationErrors.forEach((err) => {
                     const field = err.path;
-                    if (!newErrors[field]) {
-                        newErrors[field] = err.msg;
+                    if (!formErrors[field]) {
+                        formErrors[field] = err.msg;
                     }
                 });
 
-                setErrors(newErrors);
+                setErrors(formErrors);
             } else {
                 console.error('Registration error:', error);
             }
@@ -78,119 +60,118 @@ function SignUpPage() {
 
     if (registeredEmail.length) {
         return (
-            <StyledContainer>
-                <Typography variant="h6" align="center">
-                    You need to confirm your email address. We sent you an email to {registeredEmail}.
-                </Typography>
-            </StyledContainer>
+            <Container sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                minHeight: '50vh',
+                alignItems: 'center'
+            }}>
+                <Typography variant="h6" align="center">Please confirm your email address. We've sent a confirmation email to {registeredEmail}.</Typography>
+            </Container>
         );
     }
 
     return (
-        <StyledContainer>
-            <StyledForm onSubmit={handleSubmit}>
-                <Typography variant="h5" align="center" gutterBottom>
-                    Sign up
-                </Typography>
+        <Container sx={{ display: 'flex', justifyContent: 'center', minHeight: '50vh', alignItems: 'center'}}>
+            <StyledForm onSubmit={handleJoin}>
+                <Typography variant="h5" align="center" gutterBottom>Join</Typography>
 
                 <TextField
+                    color="success"
+                    value={formData.login}
                     variant="outlined"
                     margin="normal"
                     required
+                    error={!!errors.login}
                     fullWidth
                     id="login"
                     label="Login"
+                    helperText={errors.login}
                     name="login"
                     autoComplete="username"
-                    value={formData.login}
                     onChange={handleChange}
-                    error={!!errors.login}
-                    helperText={errors.login}
                 />
 
                 <TextField
+                    color="success"
                     variant="outlined"
                     margin="normal"
+                    onChange={handleChange}
                     required
                     fullWidth
+                    error={!!errors.email}
                     id="email"
                     label="Email"
+                    helperText={errors.email}
                     name="email"
                     autoComplete="email"
                     value={formData.email}
-                    onChange={handleChange}
-                    error={!!errors.email}
-                    helperText={errors.email}
                 />
 
                 <TextField
+                    onChange={handleChange}
+                    color="success"
+                    value={formData.fullName}
                     variant="outlined"
                     margin="normal"
+                    helperText={errors.fullName}
+                    label="Full Name"
                     required
+                    error={!!errors.fullName}
                     fullWidth
                     id="fullName"
-                    label="Full Name"
                     name="fullName"
                     autoComplete="name"
-                    value={formData.fullName}
-                    onChange={handleChange}
-                    error={!!errors.fullName}
-                    helperText={errors.fullName}
                 />
 
                 <TextField
+                    color="success"
                     variant="outlined"
                     margin="normal"
+                    value={formData.password}
                     required
                     fullWidth
+                    helperText={errors.password}
                     name="password"
                     label="Password"
                     type="password"
+                    error={!!errors.password}
                     id="password"
                     autoComplete="new-password"
-                    value={formData.password}
                     onChange={handleChange}
-                    error={!!errors.password}
-                    helperText={errors.password}
                 />
 
                 <TextField
+                    color="success"
                     variant="outlined"
                     margin="normal"
+                    onChange={handleChange}
                     required
                     fullWidth
+                    value={formData.password_confirm}
                     name="password_confirm"
                     label="Confirm Password"
                     type="password"
+                    error={!!errors.password_confirm}
                     id="password_confirm"
                     autoComplete="new-password"
-                    value={formData.password_confirm}
-                    onChange={handleChange}
-                    error={!!errors.password_confirm}
                     helperText={errors.password_confirm}
                 />
 
-                <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{ mt: 2 }}
-                >
-                    Sign up
-                </Button>
+                <Button type="submit" fullWidth color="success" variant="contained" sx={{ mt: 3 }}>Join</Button>
 
                 <Grid container spacing={2} sx={{ mt: 3 }}>
                     <Grid size={12}>
                         <Box>
-                            <Typography align="center">
-                                Already have an account? <Link href="/sign-in">Sign in</Link>
+                            <Typography align="center" color="success">
+                                Already have an account? <Link color="success" href="/log-in">Log In</Link>
                             </Typography>
                         </Box>
                     </Grid>
                 </Grid>
             </StyledForm>
-        </StyledContainer>
+        </Container>
     );
 }
 
-export default SignUpPage;
+export default JoinPage;
