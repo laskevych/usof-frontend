@@ -1,53 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip} from '@mui/material';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
-
+import { useSelector } from 'react-redux';
+import {Box, Avatar, Typography, IconButton, TextField, Button, Tooltip} from '@mui/material';
 import AddCommentIcon from '@mui/icons-material/AddComment';
-
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-
-import SaveIcon from '@mui/icons-material/Save';
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import SaveAsIcon from '@mui/icons-material/SaveAs';
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import BlockIcon from '@mui/icons-material/Block';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import EmojiEventsOutlinedIcon from '@mui/icons-material/EmojiEventsOutlined';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import StarIcon from '@mui/icons-material/Star';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
 
 function formatCreatedAt(timestamp) {
     const date = new Date(timestamp);
-    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }) + ' ' +
-        date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    return date.toLocaleTimeString('en-US', { minute: '2-digit', hour: '2-digit', hour12: false }) + ' ' + date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 
 const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentInState, level }) => {
     const { authToken, user } = useSelector((state) => state.user);
     const [likes, setLikes] = useState([]);
-    const [editMode, setEditMode] = useState(false);
     const [content, setContent] = useState(comment.content);
-    const isUserLikedThis = likes.some(like => like.type === 'like' && like.author.id === user?.id);
-    const isUserDislikedThis = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
-    const userCanSetHelpful = !comment.isBest && post.author.id === user?.id;
+    const [editMode, setEditMode] = useState(false);
 
-    const [showReplyForm, setShowReplyForm] = useState(false); // State для форми відповіді
-    const [replyContent, setReplyContent] = useState(''); // State для тексту відповіді
+    const [showReplyForm, setShowReplyForm] = useState(false);
+    const [replyContent, setReplyContent] = useState('');
 
     const fetchLikes = async () => {
         try {
             const response = await axios.get(`http://localhost:8080/api/comments/${comment.id}/like`);
             setLikes(response.data.data);
         } catch (error) {
-            console.error('Error fetching.', error);
+            console.error('Error. ', error);
         }
     };
 
     useEffect(() => {
         fetchLikes();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [comment.id]);
 
     const addLike = async () => {
@@ -65,7 +57,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             }
             await fetchLikes();
         } catch (error) {
-            console.error('Error handling like:', error);
+            console.error('Error. ', error);
         }
     };
 
@@ -84,7 +76,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             }
             await fetchLikes();
         } catch (error) {
-            console.error('Error handling dislike:', error);
+            console.error('Error. ', error);
         }
     };
 
@@ -96,7 +88,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             setEditMode(false);
             onCommentUpdate();
         } catch (error) {
-            console.error('Error saving comment:', error);
+            console.error('Error. ', error);
         }
     };
 
@@ -107,7 +99,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             });
             updateCommentInState(comment.id, { status: 'inactive' });
         } catch (error) {
-            console.error('Error saving comment:', error);
+            console.error('Error. ', error);
         }
     };
 
@@ -118,18 +110,18 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             });
             onDelete();
         } catch (error) {
-            console.error('Error deleting comment:', error);
+            console.error('Error. ', error);
         }
     };
 
-    const handleHelpful = async () => {
+    const handleBest = async () => {
         try {
-            await axios.patch(`http://localhost:8080/api/comments/${comment.id}/setHelpful`, {}, {
+            await axios.patch(`http://localhost:8080/api/comments/${comment.id}/setBest`, {}, {
                 headers: { Authorization: `Bearer ${authToken}` },
             });
             updateCommentInState(comment.id, { isBest: true });
         } catch (error) {
-            console.error('Error marking comment as helpful:', error);
+            console.error('Error. ', error);
         }
     };
 
@@ -148,9 +140,13 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             setReplyContent('');
             setShowReplyForm(false);
         } catch (error) {
-            console.error('Error adding reply:', error);
+            console.error('Error ', error);
         }
     };
+
+    const isUserLikedThis = likes.some(like => like.type === 'like' && like.author.id === user?.id);
+    const isUserDislikedThis = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
+    const userCanSetBest = !comment.isBest && post.author.id === user?.id;
 
     return (
         <Box sx={{ border: '1px solid #ddd', p: 2, borderRadius: 1, mb: 2, opacity: comment.status === 'inactive' ? 0.5 : 1 }}>
@@ -186,24 +182,16 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                     <TextField
                         color="success"
                         fullWidth
+                        onChange={(e) => setContent(e.target.value)}
                         multiline
                         value={content}
-                        onChange={(e) => setContent(e.target.value)}
                         size="small"
                     />
                 </Box>
             ) : (
                 <Typography variant="body2">{content}</Typography>
             )}
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 2,
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}
-            >
+            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between'}}>
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                     <IconButton
                         onClick={addLike}
@@ -213,72 +201,43 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                         {isUserLikedThis ? <ArrowUpwardIcon color="success"/> : <ArrowUpwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'like').length}</Typography>
-
-                    <IconButton
-                        onClick={addDislike}
-                        disabled={!authToken}
-                    >
+                    <IconButton onClick={addDislike} disabled={!authToken}>
                         {isUserDislikedThis ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'dislike').length}</Typography>
-
-                    {userCanSetHelpful ?
-                        <Button onClick={handleHelpful} size="small" color="warning" startIcon={<EmojiEventsOutlinedIcon />}>
-                            Helpful
-                        </Button>
+                    {userCanSetBest ?
+                        <Button onClick={handleBest} size="small" color="warning" startIcon={<StarBorderIcon />}>Best</Button>
                         : (comment.isBest || comment.isBest === 1) && (
-                            <Tooltip title="Helpful" placement="top">
+                            <Tooltip title="Best" placement="top">
                                 <span>
-                                    <IconButton disabled size="small">
-                                        {comment.isBest ? <EmojiEventsIcon color="warning" /> : <EmojiEventsOutlinedIcon />}
-                                    </IconButton>
+                                    <IconButton disabled size="small">{comment.isBest ? <StarIcon color="warning" /> : <StarBorderIcon />}</IconButton>
                                 </span>
                             </Tooltip>
                         )
                     }
 
                     {authToken && level < 2 && (
-                        <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" color="success" startIcon={<ReplyAllIcon color="success" />}>
-                            Reply
-                        </Button>
+                        <Button onClick={() => setShowReplyForm(!showReplyForm)} size="small" color="success" startIcon={<ReplyAllIcon color="success" />}>Reply</Button>
                     )}
 
                     {(user?.role === 'admin') && (
-                        <Button
-                            size="small"
-                            color="primary"
-                            startIcon={<ManageAccountsIcon />}
-                            href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`}
-                            component="a"
-                            clickable
-                            target="_blank"
-                        >
-                            Modify in Admin Panel
-                        </Button>
+                        <Button size="small" color="primary" startIcon={<ManageAccountsIcon />} href={`http://localhost:8080/admin/resources/comments/records/${comment.id}/show`} component="a" clickable target="_blank">Modify in Admin Panel</Button>
                     )}
 
                     {(user?.id === comment.author.id && !editMode && comment.status === 'active') && (
-                        <Button onClick={() => setEditMode(!editMode)} size="small" color="default" startIcon={<EditIcon />}>
-                            Edit
-                        </Button>
+                        <Button onClick={() => setEditMode(!editMode)} size="small" color="default" startIcon={<EditNoteIcon />}>Edit</Button>
                     )}
 
                     {(user?.id === comment.author.id && editMode) && (
-                        <Button onClick={handleSave} size="small" color="success" startIcon={<SaveIcon />}>
-                            Save
-                        </Button>
+                        <Button onClick={handleSave} size="small" color="success" startIcon={<SaveAsIcon />}>Save</Button>
                     )}
 
                     {(user?.id === comment.author.id && comment.status === 'active') && (
-                        <Button onClick={handleDisable} size="small" color="primary" startIcon={<BlockIcon />}>
-                            Disable
-                        </Button>
+                        <Button onClick={handleDisable} size="small" color="primary" startIcon={<BlockIcon />}>Disable</Button>
                     )}
 
                     {user?.id === comment.author.id && (
-                        <Button onClick={handleDelete} size="small" color="error" startIcon={<DeleteIcon />}>
-                            Delete
-                        </Button>
+                        <Button onClick={handleDelete} size="small" color="error" startIcon={<DeleteForeverIcon />}>Delete</Button>
                     )}
                 </Box>
             </Box>
@@ -287,15 +246,7 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
                 <>
                     {showReplyForm && (
                         <Box sx={{ display: 'flex', gap: 1, mt: 1, mb: 1 }}>
-                            <TextField
-                                color="success"
-                                fullWidth
-                                placeholder="Add a reply"
-                                value={replyContent}
-                                onChange={(e) => setReplyContent(e.target.value)}
-                                multiline
-                                size="small"
-                            />
+                            <TextField color="success" fullWidth placeholder="Add a reply" value={replyContent} onChange={(e) => setReplyContent(e.target.value)} multiline size="small"/>
                             <Button onClick={handleAddReply} variant="contained" color="success" startIcon={<AddCommentIcon />}>Add</Button>
                         </Box>
                     )}
@@ -311,11 +262,10 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
     );
 };
 
-function CommentsBlock({ post }) {
+function Comments({ post }) {
     const { authToken } = useSelector(state => state.user);
-    const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
-
+    const [comments, setComments] = useState([]);
     useEffect(() => {
         const fetchComments = async () => {
             try {
@@ -361,30 +311,15 @@ function CommentsBlock({ post }) {
         <Box sx={{mt: 2}}>
             {authToken && (
                 <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
-                    <TextField
-                        color="success"
-                        fullWidth
-                        placeholder="Add a comment"
-                        value={newComment}
-                        onChange={(e) => setNewComment(e.target.value)}
-                        multiline
-                    />
+                    <TextField color="success" fullWidth placeholder="Add a comment" value={newComment} onChange={(e) => setNewComment(e.target.value)} multiline/>
                     <Button onClick={handleAddComment} variant="contained" color="success" startIcon={<AddCommentIcon />}>Add</Button>
                 </Box>
             )}
             {comments.map(comment => (
-                <CommentItem
-                    key={comment.id}
-                    comment={comment}
-                    post={post}
-                    onCommentUpdate={() => setComments(prev => prev)}
-                    onDelete={() => setComments(prev => prev.filter(c => c.id !== comment.id))}
-                    updateCommentInState={updateCommentInState}
-                    level={1}
-                />
+                <CommentItem key={comment.id} comment={comment} post={post} onCommentUpdate={() => setComments(prev => prev)} onDelete={() => setComments(prev => prev.filter(c => c.id !== comment.id))} updateCommentInState={updateCommentInState} level={1}/>
             ))}
         </Box>
     );
 }
 
-export default CommentsBlock;
+export default Comments;

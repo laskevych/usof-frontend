@@ -10,7 +10,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
-import CommentsBlock from "../comment/CommentsBlock";
+import Comments from "../comment/Comments";
 
 function formatCreatedAt(timestamp) {
     const date = new Date(timestamp);
@@ -245,7 +245,7 @@ function PostPage() {
                 </Card>
             </Box>
 
-            <CommentsBlock post={post}/>
+            <Comments post={post}/>
         </Grid>
     );
 }
