@@ -18,7 +18,7 @@ import UserPage from "./user/UserPage";
 import UserEditPage from "./user/UserEditPage";
 import ProtectedRoute from './route/ProtectedRoute';
 import AuthorRoute from './route/AuthorRoute';
-import ProfileOwnerRoute from './route/ProfileOwnerRoute';
+import UserOwnerRoute from './route/UserOwnerRoute';
 import GuestRoute from "./route/GuestRoute";
 import NotFoundPage from './route/NotFoundPage';
 
@@ -121,9 +121,9 @@ function App() {
                                     path="/users/:id/edit"
                                     element={
                                         <ProtectedRoute>
-                                            <ProfileOwnerRoute>
+                                            <UserOwnerRoute>
                                                 <UserEditPage />
-                                            </ProfileOwnerRoute>
+                                            </UserOwnerRoute>
                                         </ProtectedRoute>
                                     }
                                 />
