@@ -15,7 +15,7 @@ import {
     Grid2 as Grid,
 } from '@mui/material';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import PostItem from "../post/PostItem";
+import PostItem from "./PostItem";
 
 function UserPage() {
     const { user, authToken } = useSelector((state) => state.user);

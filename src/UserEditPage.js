@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Box, TextField, Button, Typography, Avatar, IconButton } from '@mui/material';
-import { setUser } from '../store/userSlice';
+import { setUser } from './store/userSlice';
 
 function UserEditPage() {
     const dispatch = useDispatch();

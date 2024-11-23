@@ -4,7 +4,7 @@ import {Container, TextField, Button, Typography, Link, Grid2 as Grid} from '@mu
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../store/userSlice';
+import { setUser } from './store/userSlice';
 
 const StyledForm = styled('form')(({ theme }) => ({ width: '100%', maxWidth: 400 }));
 

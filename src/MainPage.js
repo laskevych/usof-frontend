@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {Link as RouterLink} from "react-router-dom";
 import {Box, Grid2 as Grid, List, ListItem, ListItemText, ListItemAvatar, Avatar} from "@mui/material";
-import PostList from '../post/PostList';
+import PostList from './PostList';
 import Filters from "./Filters";
 
 function formatCreatedAt(timestamp) {

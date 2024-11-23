@@ -5,7 +5,7 @@ import {useSelector} from "react-redux";
 import {Box, Pagination, LinearProgress, Chip, Typography} from '@mui/material';
 import { useLocation, useNavigate, useParams} from 'react-router-dom';
 import Grid from "@mui/material/Grid2";
-import PostItem from '../post/PostItem';
+import PostItem from './PostItem';
 
 function CategoryPage() {
     const [category, setCategory] = useState({});

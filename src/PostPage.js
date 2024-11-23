@@ -10,7 +10,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 
-import Comments from "../comment/Comments";
+import Comments from "./Comments";
 
 function formatCreatedAt(timestamp) {
     const date = new Date(timestamp);

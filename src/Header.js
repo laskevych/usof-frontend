@@ -1,5 +1,5 @@
 import React from 'react';
-import { logout } from '../store/userSlice';
+import { logout } from './store/userSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, Toolbar, Button, Avatar, IconButton, Container, Box, Drawer, MenuItem, Divider, Typography } from '@mui/material';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
