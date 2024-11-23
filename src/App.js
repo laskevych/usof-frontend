@@ -1,29 +1,27 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import LogInPage from './auth/LogInPage';
-import JoinPage from './auth/JoinPage';
-import ConfirmEmailPage from './auth/ConfirmEmailPage';
-import MainPage from './main/MainPage';
+import {Box, Container, CssBaseline} from "@mui/material";
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { AuthProvider } from './auth/AuthContext';
-import PasswordResetRequestPage from "./auth/PasswordResetRequestPage";
-import PasswordResetConfirmPage from "./auth/PasswordResetConfirmPage";
-import Footer from "./main/Footer";
-import Header from "./main/Header";
-import {Box, Container} from "@mui/material";
-import PostPage from "./post/PostPage";
-import CategoryPage from "./category/CategoryPage";
-import PostEditPage from "./post/PostEditPage";
-import PostCreatePage from "./post/PostCreatePage";
-import UserPage from "./user/UserPage";
-import UserEditPage from "./user/UserEditPage";
+import GuestRoute from "./route/GuestRoute";
 import ProtectedRoute from './route/ProtectedRoute';
 import AuthorRoute from './route/AuthorRoute';
 import UserOwnerRoute from './route/UserOwnerRoute';
-import GuestRoute from "./route/GuestRoute";
+import Header from "./main/Header";
+import LogInPage from './auth/LogInPage';
+import JoinPage from './auth/JoinPage';
+import ConfirmEmailPage from './auth/ConfirmEmailPage';
+import PasswordResetRequestPage from "./auth/PasswordResetRequestPage";
+import PasswordResetConfirmPage from "./auth/PasswordResetConfirmPage";
+import MainPage from './main/MainPage';
+import PostPage from "./post/PostPage";
+import PostEditPage from "./post/PostEditPage";
+import PostCreatePage from "./post/PostCreatePage";
+import CategoryPage from "./category/CategoryPage";
+import UserPage from "./user/UserPage";
+import UserEditPage from "./user/UserEditPage";
 import NotFoundPage from './route/NotFoundPage';
-
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
+import Footer from "./main/Footer";
 
 const darkTheme = createTheme({
     palette: {
@@ -37,57 +35,42 @@ function App() {
             <CssBaseline />
             <AuthProvider>
                 <Router>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            minHeight: '100vh',
-                        }}
-                    >
+                    <Box sx={{display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
                         <Header />
-                        <Container
-                            maxWidth="md"
-                            component="main"
-                            sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}
-                        >
+                        <Container maxWidth="md" component="main" sx={{ display: 'flex', flexDirection: 'column', my: 16, gap: 4 }}>
                             <Routes>
-                                <Route
-                                    path="/log-in"
+                                <Route path="/log-in"
                                     element={
                                         <GuestRoute>
                                             <LogInPage />
                                         </GuestRoute>
                                     }
                                 />
-                                <Route
-                                    path="/join"
+                                <Route path="/join"
                                     element={
                                         <GuestRoute>
                                             <JoinPage />
                                         </GuestRoute>
                                     }
                                 />
-                                <Route
-                                    path="/confirm-email/:confirm_token"
+                                <Route path="/password-reset"
+                                       element={
+                                           <GuestRoute>
+                                               <PasswordResetRequestPage />
+                                           </GuestRoute>
+                                       }
+                                />
+                                <Route path="/password-reset/:confirm_token"
+                                       element={
+                                           <GuestRoute>
+                                               <PasswordResetConfirmPage />
+                                           </GuestRoute>
+                                       }
+                                />
+                                <Route path="/confirm-email/:confirm_token"
                                     element={
                                         <GuestRoute>
                                             <ConfirmEmailPage />
-                                        </GuestRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/password-reset"
-                                    element={
-                                        <GuestRoute>
-                                            <PasswordResetRequestPage />
-                                        </GuestRoute>
-                                    }
-                                />
-                                <Route
-                                    path="/password-reset/:confirm_token"
-                                    element={
-                                        <GuestRoute>
-                                            <PasswordResetConfirmPage />
                                         </GuestRoute>
                                     }
                                 />
@@ -96,9 +79,7 @@ function App() {
                                 <Route path="/posts/:id" element={<PostPage />} />
                                 <Route path="/categories/:id/posts" element={<CategoryPage />} />
                                 <Route path="/users/:id" element={<UserPage />} />
-
-                                <Route
-                                    path="/posts/create/"
+                                <Route path="/posts/create/"
                                     element={
                                         <ProtectedRoute>
                                             <PostCreatePage />
@@ -106,8 +87,7 @@ function App() {
                                     }
                                 />
 
-                                <Route
-                                    path="/posts/:id/edit"
+                                <Route path="/posts/:id/edit"
                                     element={
                                         <ProtectedRoute>
                                             <AuthorRoute>
@@ -117,8 +97,7 @@ function App() {
                                     }
                                 />
 
-                                <Route
-                                    path="/users/:id/edit"
+                                <Route path="/users/:id/edit"
                                     element={
                                         <ProtectedRoute>
                                             <UserOwnerRoute>
@@ -127,7 +106,6 @@ function App() {
                                         </ProtectedRoute>
                                     }
                                 />
-
                                 <Route path="*" element={<NotFoundPage />} />
                             </Routes>
                         </Container>
