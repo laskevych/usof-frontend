@@ -1,24 +1,20 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import PostForm from './PostForm';
+import { useNavigate } from 'react-router-dom';
+import PostFormPage from './PostFormPage';
 
 function PostCreatePage() {
-    const { authToken } = useSelector((state) => state.user);
     const navigate = useNavigate();
-
+    const { authToken } = useSelector((state) => state.user);
     const handleSubmit = async (payload) => {
-        const response = await axios.post('http://localhost:8080/api/posts/', payload, {
-            headers: { Authorization: `Bearer ${authToken}` },
-        });
-        if (response.status === 201) {
-            const postId = response.data.data.id;
-            navigate(`/posts/${postId}/edit`);
+        const res = await axios.post('http://localhost:8080/api/posts/', payload, { headers: { Authorization: `Bearer ${authToken}` } });
+        if (res.status === 201) {
+            navigate(`/posts/${res.data.data.id}/edit`);
         }
     };
 
-    return <PostForm onSubmit={handleSubmit} />;
+    return <PostFormPage onSubmit={handleSubmit} />;
 }
 
 export default PostCreatePage;

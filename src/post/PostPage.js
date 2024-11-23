@@ -69,7 +69,7 @@ function PostPage() {
 
     const handleFavorite = async () => {
         try {
-            if (userHasFavorited) {
+            if (isFavoriteUserPost) {
                 await axios.delete(`http://localhost:8080/api/posts/${id}/favorite/`, {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
@@ -84,10 +84,10 @@ function PostPage() {
         }
     };
 
-    const handleLike = async () => {
+    const addLike = async () => {
         if (!authToken) return;
         try {
-            if (userHasLiked) {
+            if (isUserLikedThis) {
                 const likeId = likes.find((like) => like.type === 'like' && like.author.id === user.id).id;
                 await axios.delete(`http://localhost:8080/api/posts/${id}/like/${likeId}`, {
                     headers: { Authorization: `Bearer ${authToken}` },
@@ -103,9 +103,9 @@ function PostPage() {
         }
     };
 
-    const handleDislike = async () => {
+    const addDislike = async () => {
         try {
-            if (userHasDisliked) {
+            if (isUserDislikedThis) {
                 const dislikeId = likes.find((like) => like.type === 'dislike' && like.author.id === user.id).id;
                 await axios.delete(`http://localhost:8080/api/posts/${id}/like/${dislikeId}`, {
                     headers: { Authorization: `Bearer ${authToken}` },
@@ -121,9 +121,9 @@ function PostPage() {
         }
     };
 
-    const userHasFavorited = favoritePosts.some((favoritePost) => favoritePost.id === post.id);
-    const userHasDisliked = likes.some((like) => like.type === 'dislike' && like.author.id === user?.id);
-    const userHasLiked = likes.some((like) => like.type === 'like' && like.author.id === user?.id);
+    const isFavoriteUserPost = favoritePosts.some((favoritePost) => favoritePost.id === post.id);
+    const isUserDislikedThis = likes.some((like) => like.type === 'dislike' && like.author.id === user?.id);
+    const isUserLikedThis = likes.some((like) => like.type === 'like' && like.author.id === user?.id);
 
     useEffect(() => {
         fetchPost();
@@ -144,25 +144,10 @@ function PostPage() {
     return (
         <Grid size={{ xs: 12, md: 8 }}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, height: '100%' }}>
-                <Card
-                    variant="outlined"
-                    tabIndex={0}
-                    sx={{ height: '100%', display: 'flex', flexDirection: 'column', padding: 0, textDecoration: 'none' }}
-                >
-                    <Box
-                        sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', padding: '16px', textDecoration: 'none', color: 'inherit', justifyContent: 'space-between' }}
-                    >
-                        <Box
-                            sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-                            component={RouterLink}
-                            to={`/users/${post.author.id}/`}
-                        >
-                            <Avatar
-                                key={post.author.id}
-                                alt={post.author.login}
-                                src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                                sx={{ width: 48, height: 48 }}
-                            />
+                <Card variant="outlined" tabIndex={0} sx={{ height: '100%', display: 'flex', flexDirection: 'column', padding: 0, textDecoration: 'none' }}>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', padding: '16px', textDecoration: 'none', color: 'inherit', justifyContent: 'space-between' }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }} component={RouterLink} to={`/users/${post.author.id}/`}>
+                            <Avatar key={post.author.id} alt={post.author.login} src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture} sx={{ width: 48, height: 48 }}/>
                             <Typography variant="caption">
                                 {post.author.fullName || post.author.login}
                             </Typography>
@@ -170,32 +155,29 @@ function PostPage() {
 
                         <Typography variant="caption">{formatCreatedAt(post.createdAt)}</Typography>
                     </Box>
-                    <CardContent
-                        sx={{ display: 'flex',  flexDirection: 'column',  justifyContent: 'space-between',  height: '100%',  pb: 0 }}
-                    >
+                    <CardContent sx={{ display: 'flex',  flexDirection: 'column',  justifyContent: 'space-between',  height: '100%',  pb: 0 }}>
                         <div>
                             <Typography gutterBottom variant="h6" component="div">
                                 {post.title}
                             </Typography>
                             <Typography
                                 variant="body2"
+                                sx={{ display: '-webkit-box', overflow: 'hidden', WebkitBoxOrient: 'vertical', textOverflow: 'ellipsis' }}
                                 color="text.secondary"
                                 gutterBottom
-                                sx={{ display: '-webkit-box',  WebkitBoxOrient: 'vertical',  overflow: 'hidden',  textOverflow: 'ellipsis'
-                                }}
                             >
                                 {post.content}
                             </Typography>
-                            <Box sx={{ mt: 1 }}>
+                            <Box sx={{ mt: 3 }}>
                                 {post.categories.map((category) => (
                                     <Chip
                                         key={category.id}
                                         label={category.title}
+                                        color="default"
+                                        sx={{ mr: 1, mb: 1 }}
                                         component={RouterLink}
                                         to={`/categories/${category.id}/posts`}
                                         clickable
-                                        sx={{ mr: 1, mb: 1 }}
-                                        color="default"
                                         variant="outlined"
                                     />
                                 ))}
@@ -203,37 +185,22 @@ function PostPage() {
                         </div>
                     </CardContent>
 
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 2,
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            padding: '16px',
-                        }}
-                    >
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between', padding: '16px' }}>
                         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-                            <IconButton
-                                onClick={handleLike}
-                                disabled={!authToken}
-                            >
-                                {userHasLiked ? <ArrowUpwardIcon color="success" /> : <ArrowUpwardIcon />}
+                            <IconButton disabled={!authToken} onClick={addLike}>
+                                {isUserLikedThis ? <ArrowUpwardIcon color="success" /> : <ArrowUpwardIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'like').length}</Typography>
 
-                            <IconButton
-                                onClick={handleDislike}
-                                disabled={!authToken}
-                            >
-                                {userHasDisliked ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
+                            <IconButton disabled={!authToken} onClick={addDislike}>
+                                {isUserDislikedThis ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
                             </IconButton>
                             <Typography>{likes.filter(like => like.type === 'dislike').length}</Typography>
 
                             {user && (
                                 <Tooltip title="Save" placement="top">
                                     <IconButton onClick={handleFavorite} disabled={!authToken}>
-                                        {userHasFavorited ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
+                                        {isFavoriteUserPost ? <FavoriteIcon color="error" /> : <FavoriteBorderIcon />}
                                     </IconButton>
                                 </Tooltip>
                             )}
@@ -243,29 +210,29 @@ function PostPage() {
                                 <Link
                                     component={RouterLink}
                                     to={`/posts/${post.id}/edit/`}
+                                    color="success"
                                     underline="none"
                                     sx={{
-                                        display: 'flex',
                                         alignItems: 'center',
-                                        color: 'primary.main',
+                                        display: 'flex',
                                         textDecoration: 'none'
                                     }}
                                 >
-                                    <EditIcon sx={{ mr: 1 }} />
-                                    <Typography variant="body2">Edit</Typography>
+                                    <EditIcon color="success" sx={{ mr: 1 }} />
+                                    <Typography color="success" variant="body2">Edit</Typography>
                                 </Link>
 
                             )}
 
                             {user?.role === 'admin' && (
                                 <Link
+                                    color="primary"
                                     href={`http://localhost:8080/admin/resources/posts/records/${post.id}/show`}
                                     target="_blank"
                                     underline="none"
                                     sx={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        color: 'primary.main',
                                         textDecoration: 'none'
                                     }}
                                 >

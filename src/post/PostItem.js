@@ -1,6 +1,6 @@
 import React from 'react';
-import {Card, CardContent, Avatar, Typography, Chip, Box} from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { Avatar, Typography, Card, CardContent, Chip, Box } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import CommentIcon from '@mui/icons-material/Comment';
 import BlockIcon from '@mui/icons-material/Block';
@@ -14,7 +14,7 @@ function PostItem({ post }) {
         <Card
             tabIndex={0}
             sx={{
-                opacity: post.status === 'inactive' ? 0.5 : 1,
+                opacity: post.status === 'inactive' ? 0.6 : 1,
                 display: 'flex',
                 flexDirection: 'column',
                 padding: 0,
@@ -22,18 +22,7 @@ function PostItem({ post }) {
                 height: '100%'
             }}
         >
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 2,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '16px',
-                    textDecoration: 'none',
-                    color: 'inherit'
-                }}
-            >
+            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, padding: '16px', textDecoration: 'none', color: 'inherit', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -41,31 +30,20 @@ function PostItem({ post }) {
                     alignItems: 'center'
                 }}
                 >
-                    <Box
-                        sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-                        component={RouterLink}
-                        to={`/users/${post.author.id}/`}
-                    >
-                        <Avatar
-                            key={post.author.id}
-                            alt={post.author.login}
-                            src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture}
-                            sx={{ width: 48, height: 48 }}
-                        />
-                        <Typography variant="caption">
-                            {post.author.fullName || post.author.login}
-                        </Typography>
+                    <Box to={`/users/${post.author.id}/`} sx={{ display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center', textDecoration: 'none', color: 'inherit' }} component={RouterLink}>
+                        <Avatar key={post.author.id} src={'http://localhost:8080/profile-pictures/' + post.author.profilePicture} alt={post.author.login} sx={{ width: 48, height: 48 }}/>
+                        <Typography variant="caption">{post.author.fullName || post.author.login}</Typography>
                     </Box>
                 </Box>
                 <Typography variant="caption">{formatCreatedAt(post.createdAt)}</Typography>
             </Box>
             <CardContent
                 component={RouterLink}
-                to={`/posts/${post.id}/`}
                 sx={{
                     color: 'white',
                     textDecoration: 'none'
                 }}
+                to={`/posts/${post.id}/`}
             >
                 <div>
                     <Typography gutterBottom variant="h6" component="div">
@@ -84,36 +62,17 @@ function PostItem({ post }) {
                             textDecoration: 'none'
                         }}
                     >
-                        {post.content.substring(0, 200)}...
+                        {post.content.substring(0, 194)}...
                     </Typography>
                     <Box sx={{ mt: 1 }}>
                         {post.categories.map((category) => (
-                            <Chip
-                                key={category.id}
-                                label={category.title}
-                                component={RouterLink}
-                                to={`/categories/${category.id}/posts`}
-                                clickable
-                                sx={{ mr: 1, mb: 1 }}
-                                color="default"
-                                    variant="outlined"
-                            />
+                            <Chip sx={{ mr: 1, mb: 1 }} key={category.id} label={category.title} clickable to={`/categories/${category.id}/posts`} component={RouterLink} variant="outlined" color="default"/>
                         ))}
                     </Box>
                 </div>
             </CardContent>
 
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 2,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '16px',
-                    marginTop: 'auto'
-                }}
-            >
+            <Box sx={{display: 'flex', flexDirection: 'row', gap: 2, alignItems: 'center', justifyContent: 'space-between', padding: '16px', marginTop: 'auto'}}>
                 <Chip icon={<ArrowUpwardIcon />} color="default" variant="outlined" label={post.likes} sx={{border: 'none', boxShadow: 'none'}}  />
                 {post.status === 'inactive' && (
                     <Chip icon={<BlockIcon/>} label="Inactive" variant="outlined" color="default" sx={{border: 'none', boxShadow: 'none'}}></Chip>

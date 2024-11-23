@@ -29,8 +29,8 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
     const [likes, setLikes] = useState([]);
     const [editMode, setEditMode] = useState(false);
     const [content, setContent] = useState(comment.content);
-    const userHasLiked = likes.some(like => like.type === 'like' && like.author.id === user?.id);
-    const userHasDisliked = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
+    const isUserLikedThis = likes.some(like => like.type === 'like' && like.author.id === user?.id);
+    const isUserDislikedThis = likes.some(like => like.type === 'dislike' && like.author.id === user?.id);
     const userCanSetHelpful = !comment.isBest && post.author.id === user?.id;
 
     const [showReplyForm, setShowReplyForm] = useState(false); // State для форми відповіді
@@ -50,10 +50,10 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [comment.id]);
 
-    const handleLike = async () => {
+    const addLike = async () => {
         if (!authToken) return;
         try {
-            if (userHasLiked) {
+            if (isUserLikedThis) {
                 const likeId = likes.find((like) => like.type === 'like' && like.author.id === user.id).id;
                 await axios.delete(`http://localhost:8080/api/comments/${comment.id}/like/${likeId}`, {
                     headers: { Authorization: `Bearer ${authToken}` },
@@ -69,10 +69,10 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
         }
     };
 
-    const handleDislike = async () => {
+    const addDislike = async () => {
         if (!authToken) return;
         try {
-            if (userHasDisliked) {
+            if (isUserDislikedThis) {
                 const dislikeId = likes.find((like) => like.type === 'dislike' && like.author.id === user.id).id;
                 await axios.delete(`http://localhost:8080/api/comments/${comment.id}/like/${dislikeId}`, {
                     headers: { Authorization: `Bearer ${authToken}` },
@@ -206,19 +206,19 @@ const CommentItem = ({ comment, post, onCommentUpdate, onDelete, updateCommentIn
             >
                 <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
                     <IconButton
-                        onClick={handleLike}
+                        onClick={addLike}
                         disabled={!authToken}
                         size="small"
                     >
-                        {userHasLiked ? <ArrowUpwardIcon color="success"/> : <ArrowUpwardIcon />}
+                        {isUserLikedThis ? <ArrowUpwardIcon color="success"/> : <ArrowUpwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'like').length}</Typography>
 
                     <IconButton
-                        onClick={handleDislike}
+                        onClick={addDislike}
                         disabled={!authToken}
                     >
-                        {userHasDisliked ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
+                        {isUserDislikedThis ? <ArrowDownwardIcon color="error" /> : <ArrowDownwardIcon />}
                     </IconButton>
                     <Typography variant="caption">{likes.filter(like => like.type === 'dislike').length}</Typography>
 

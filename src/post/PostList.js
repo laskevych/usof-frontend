@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {Box, Pagination, LinearProgress } from '@mui/material';
 import axios from 'axios';
-import PostItem from './PostItem';
-import {useLocation, useNavigate} from 'react-router-dom';
-import Grid from "@mui/material/Grid2";
 import {useSelector} from "react-redux";
+import {useNavigate, useLocation} from 'react-router-dom';
+import {Box, Pagination, LinearProgress, Grid2 as Grid } from '@mui/material';
+import PostItem from './PostItem';
 
 function PostList() {
     const { authToken } = useSelector((state) => state.user);
